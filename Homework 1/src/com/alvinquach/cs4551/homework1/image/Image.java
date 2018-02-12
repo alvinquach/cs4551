@@ -1,23 +1,27 @@
 package com.alvinquach.cs4551.homework1.image;
 
+import java.awt.BorderLayout;
+import java.awt.image.BufferedImage;
+
 /*******************************************************
  CS4551 Multimedia Software Systems
  @ Author: Elaine Kang
 
  This image class is for a 24bit RGB image only.
  *******************************************************/
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintWriter;
 
-import java.io.*;
-import java.util.*;
-import java.awt.*;
-import java.awt.image.*;
-import javax.swing.*;
 import javax.imageio.stream.FileImageInputStream;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 // A wrapper class of BufferedImage
 // Provide a couple of utility functions such as reading from and writing to PPM file
 
-public class Image
+public abstract class Image
 {
   protected BufferedImage img;
   protected String fileName;			// Input file name
