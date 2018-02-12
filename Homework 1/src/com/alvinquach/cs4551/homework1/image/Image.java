@@ -33,7 +33,7 @@ public abstract class Image
   {
 	fileName = "";
 	img = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-	System.out.println("Created an empty image with size " + w + "x" + h);
+//	System.out.println("Created an empty image with size " + w + "x" + h);
   }
 
   public Image(String fn) throws IOException
