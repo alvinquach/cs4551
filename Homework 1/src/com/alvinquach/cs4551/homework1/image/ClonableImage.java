@@ -1,7 +1,9 @@
 package com.alvinquach.cs4551.homework1.image;
 
+import java.io.IOException;
+
 /**
- * Extension of the {@code Image} class that provides cloning capabilities.
+ * Implementation of the {@code Image} class that provides cloning capabilities.
  * @author Alvin Quach
  */
 public class ClonableImage extends Image implements Cloneable {
@@ -10,7 +12,7 @@ public class ClonableImage extends Image implements Cloneable {
 		super(w, h);
 	}
 
-	public ClonableImage(String fn) {
+	public ClonableImage(String fn) throws IOException {
 		super(fn);
 	}
 

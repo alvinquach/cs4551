@@ -11,6 +11,7 @@ import java.awt.image.BufferedImage;
  *******************************************************/
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintWriter;
 
 import javax.imageio.stream.FileImageInputStream;
@@ -35,7 +36,7 @@ public abstract class Image
 	System.out.println("Created an empty image with size " + w + "x" + h);
   }
 
-  public Image(String fn)
+  public Image(String fn) throws IOException
   // Create an image and read the data from the file
   {
 	  fileName = fn;
@@ -115,67 +116,61 @@ public abstract class Image
     System.out.println("RGB Pixel value at ("+x+","+y+"):"+(0xFF & r)+","+(0xFF & g)+","+(0xFF & b));
    }
 
-  public void readPPM(String fileName)
+  public void readPPM(String fileName) throws IOException
   // read a data from a PPM file
   {
 	File fIn = null;
 	FileImageInputStream fis = null;
 
-	try{
-		fIn = new File(fileName);
-		fis = new FileImageInputStream(fIn);
+	fIn = new File(fileName);
+	fis = new FileImageInputStream(fIn);
 
-		System.out.println("Reading "+fileName+"...");
+	System.out.println("Reading "+fileName+"...");
 
-		// read Identifier
-		if(!fis.readLine().equals("P6"))
-		{
-			System.err.println("This is NOT P6 PPM. Wrong Format.");
-			System.exit(0);
-		}
-
-		// read Comment line
-		String commentString = fis.readLine();
-
-		// read width & height
-		String[] WidthHeight = fis.readLine().split(" ");
-		int width = Integer.parseInt(WidthHeight[0]);
-		int height = Integer.parseInt(WidthHeight[1]);
-
-		// read maximum value
-		int maxVal = Integer.parseInt(fis.readLine());
-
-		if(maxVal != 255)
-		{
-			System.err.println("Max val is not 255");
-			System.exit(0);
-		}
-
-		// read binary data byte by byte and save it into BufferedImage object
-		int x,y;
-		byte[] rgb = new byte[3];
-		img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-
-		for(y=0;y<getH();y++)
-		{
-	  		for(x=0;x<getW();x++)
-			{
-				rgb[0] = fis.readByte();
-				rgb[1] = fis.readByte();
-				rgb[2] = fis.readByte();
-				setPixel(x, y, rgb);
-			}
-		}
-
-       	fis.close();
-
-		System.out.println("Read "+fileName+" Successfully.");
-
-	} // try
-	catch(Exception e)
+	// read Identifier
+	if(!fis.readLine().equals("P6"))
 	{
-		System.err.println(e.getMessage());
+		fis.close();
+		throw new IOException("This is NOT P6 PPM. Wrong Format.");
 	}
+
+	// read Comment line
+	String commentString = fis.readLine();
+
+	// read width & height
+	String[] WidthHeight = fis.readLine().split(" ");
+	int width = Integer.parseInt(WidthHeight[0]);
+	int height = Integer.parseInt(WidthHeight[1]);
+
+	// read maximum value
+	int maxVal = Integer.parseInt(fis.readLine());
+
+	if(maxVal != 255)
+	{
+		fis.close();
+		throw new IOException("Max val is not 255");
+	}
+
+	// read binary data byte by byte and save it into BufferedImage object
+	int x,y;
+	byte[] rgb = new byte[3];
+	img = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+
+	for(y=0;y<getH();y++)
+	{
+  		for(x=0;x<getW();x++)
+		{
+			rgb[0] = fis.readByte();
+			rgb[1] = fis.readByte();
+			rgb[2] = fis.readByte();
+			setPixel(x, y, rgb);
+		}
+	}
+
+   	fis.close();
+
+	System.out.println("Read "+fileName+" Successfully.");
+
   }
 
   public void write2PPM(String fileName)
