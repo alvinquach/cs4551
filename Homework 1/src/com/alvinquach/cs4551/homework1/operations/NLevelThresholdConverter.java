@@ -1,19 +1,23 @@
 package com.alvinquach.cs4551.homework1.operations;
 
-import com.alvinquach.cs4551.homework1.image.Image;
-import com.alvinquach.cs4551.homework1.utils.math.MathUtils;
-import com.alvinquach.cs4551.homework1.utils.quantization.QuantizationUtils;
-import com.alvinquach.cs4551.homework1.utils.quantization.lookuptable.IntensityLUT;
+import com.alvinquach.cs4551.homework1.models.image.ClonableImage;
+import com.alvinquach.cs4551.homework1.models.quantization.QuantizedIntensities;
+import com.alvinquach.cs4551.homework1.utils.MathUtils;
+import com.alvinquach.cs4551.homework1.utils.QuantizationUtils;
 
 public class NLevelThresholdConverter extends ImageOperation {
 
 	private int levels;
+	
+	private QuantizedIntensities quantizedIntensities;
 
-	public NLevelThresholdConverter(Image image, int levels) {
+	public NLevelThresholdConverter(ClonableImage image, int levels) {
 		super(image);
 
 		// Make sure level is at least 2 and not greater than 256.
 		this.levels = MathUtils.clamp(levels, 2, 256);
+		
+		quantizedIntensities = QuantizationUtils.generateThresholdQuantizedIntensities(this.levels);
 	}
 
 	@Override
@@ -22,15 +26,12 @@ public class NLevelThresholdConverter extends ImageOperation {
 		// Convert the image to grayscale first.
 		new GrayscaleConverter(image).apply();
 
-		// Generate a linear LUT based on desired bit level.
-		IntensityLUT lut = QuantizationUtils.generateThresholdIntensityLUT(levels);
-
-		// Replace image intensity values with values from LUT.
+		// Replace image intensity values with quantized values.
 		for (int y = 0; y < image.getH(); y++) {
 			for (int x = 0; x < image.getW(); x++) {
 				int[] rgb = new int[3];
 				image.getPixel(x, y, rgb);
-				int quantized = QuantizationUtils.quantizeIntensityToLUT(rgb[0], lut).getValue();
+				int quantized = QuantizationUtils.getQuantizedIntensitySegment(rgb[0], quantizedIntensities).getValue();
 				image.setPixel(x, y, new int[]{quantized, quantized, quantized});
 			}
 		}	

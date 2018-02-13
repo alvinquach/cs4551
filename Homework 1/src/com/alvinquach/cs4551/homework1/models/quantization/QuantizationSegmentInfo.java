@@ -1,16 +1,16 @@
-package com.alvinquach.cs4551.homework1.utils.quantization.lookuptable;
+package com.alvinquach.cs4551.homework1.models.quantization;
 
 /**
- * Contains the index and value of the LUT segment.
+ * Contains the index and value of the quantized segment.
  * @author Alvin Quach
  */
-public class LUTSegmentInfo {
+public class QuantizationSegmentInfo {
 	
 	private int index;
 	
 	private int value;
 	
-	public LUTSegmentInfo(int index, int value) {
+	public QuantizationSegmentInfo(int index, int value) {
 		this.index = index;
 		this.value = value;
 	}

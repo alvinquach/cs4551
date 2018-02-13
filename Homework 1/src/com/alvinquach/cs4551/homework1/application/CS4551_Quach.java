@@ -6,12 +6,13 @@ import java.nio.file.Paths;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import com.alvinquach.cs4551.homework1.image.ClonableImage;
-import com.alvinquach.cs4551.homework1.image.Image;
 import com.alvinquach.cs4551.homework1.menu.MenuDisplay;
+import com.alvinquach.cs4551.homework1.models.image.ClonableImage;
+import com.alvinquach.cs4551.homework1.models.image.Image;
 import com.alvinquach.cs4551.homework1.operations.GrayscaleConverter;
-import com.alvinquach.cs4551.homework1.operations.NLevelErrorDiffusionConverter;
+import com.alvinquach.cs4551.homework1.operations.NLevelErrorDiffuser;
 import com.alvinquach.cs4551.homework1.operations.NLevelThresholdConverter;
+import com.alvinquach.cs4551.homework1.operations.UniformColorQuantizer;
 
 /**
  * @author Alvin Quach
@@ -21,7 +22,7 @@ public class CS4551_Quach {
 	private static MenuDisplay menuDisplay = new MenuDisplay();
 
 	private static ClonableImage image;
-	
+
 	private static String filename;
 
 	public static void main(String[] args) {
@@ -68,7 +69,7 @@ public class CS4551_Quach {
 				}
 
 				else {
-					Image result = image.clone();
+					ClonableImage result = image.clone();
 					if (choice == 1) {
 						try {
 							GrayscaleConverter converter = new GrayscaleConverter(result);
@@ -101,11 +102,11 @@ public class CS4551_Quach {
 							NLevelThresholdConverter thresholdConverter = new NLevelThresholdConverter(result, level);
 							thresholdConverter.applyAndDisplay();
 							thresholdConverter.save(filename);
-							
+
 							// Re-clone the original image.
 							result = image.clone();
-							
-							NLevelErrorDiffusionConverter errorDiffusionConverter = new NLevelErrorDiffusionConverter(result, level);
+
+							NLevelErrorDiffuser errorDiffusionConverter = new NLevelErrorDiffuser(result, level);
 							errorDiffusionConverter.applyAndDisplay();
 							errorDiffusionConverter.save(filename);
 						}
@@ -113,9 +114,19 @@ public class CS4551_Quach {
 							e.printStackTrace();
 						}
 					}
-					
-					// Display main menu again.
-					menuDisplay.displayMainMenu();
+					else if (choice == 3) {
+						try {
+							UniformColorQuantizer quantizer = new UniformColorQuantizer(result);
+							quantizer.applyAndDisplay();
+							quantizer.save(filename);
+						}
+						catch (Exception e) {
+							e.printStackTrace();
+						}
+
+						// Display main menu again.
+						menuDisplay.displayMainMenu();
+					}
 				}
 			}
 			catch (InputMismatchException e) {

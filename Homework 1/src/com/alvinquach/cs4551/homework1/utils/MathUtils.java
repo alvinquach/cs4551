@@ -1,4 +1,4 @@
-package com.alvinquach.cs4551.homework1.utils.math;
+package com.alvinquach.cs4551.homework1.utils;
 
 /**
  * @author Alvin Quach

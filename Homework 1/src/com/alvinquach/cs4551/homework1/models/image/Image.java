@@ -1,4 +1,4 @@
-package com.alvinquach.cs4551.homework1.image;
+package com.alvinquach.cs4551.homework1.models.image;
 
 import java.awt.BorderLayout;
 import java.awt.image.BufferedImage;

@@ -1,17 +1,18 @@
 package com.alvinquach.cs4551.homework1.operations;
 
-import com.alvinquach.cs4551.homework1.image.Image;
+import com.alvinquach.cs4551.homework1.models.image.ClonableImage;
+import com.alvinquach.cs4551.homework1.models.image.Image;
 
 /**
  * @author Alvin Quach
  */
 public abstract class ImageOperation {
 	
-	protected Image image;
+	protected ClonableImage image;
 	
 	protected String fileSuffix;
 	
-	protected ImageOperation(Image image) {
+	protected ImageOperation(ClonableImage image) {
 		this.image = image;
 	}
 	
@@ -22,7 +23,7 @@ public abstract class ImageOperation {
 		image.display();
 	}
 	
-	public final void save(String name) {
+	public void save(String name) {
 		image.write2PPM(name + "-" + getFileSuffix() + ".ppm");
 	}
 	

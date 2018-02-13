@@ -1,15 +1,15 @@
-package com.alvinquach.cs4551.homework1.utils.quantization.lookuptable;
+package com.alvinquach.cs4551.homework1.models.quantization;
 
 /**
  * @author Alvin Quach
  */
-public class LUTEntry implements Comparable<LUTEntry> {
+public class QuantizationSegment implements Comparable<QuantizationSegment> {
 
 	private int max;
 	
 	private int value;
 	
-	public LUTEntry(int max, int value) {
+	public QuantizationSegment(int max, int value) {
 		this.max = max;
 		this.value = value;
 	}
@@ -31,7 +31,7 @@ public class LUTEntry implements Comparable<LUTEntry> {
 	}
 
 	@Override
-	public int compareTo(LUTEntry o) {
+	public int compareTo(QuantizationSegment o) {
 		return max - o.getMax();
 	}
 	
