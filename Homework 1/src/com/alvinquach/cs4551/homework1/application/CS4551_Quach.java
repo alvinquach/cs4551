@@ -10,6 +10,7 @@ import com.alvinquach.cs4551.homework1.image.ClonableImage;
 import com.alvinquach.cs4551.homework1.image.Image;
 import com.alvinquach.cs4551.homework1.menu.MenuDisplay;
 import com.alvinquach.cs4551.homework1.operations.GrayscaleConverter;
+import com.alvinquach.cs4551.homework1.operations.NLevelErrorDiffusionConverter;
 import com.alvinquach.cs4551.homework1.operations.NLevelThresholdConverter;
 
 /**
@@ -97,9 +98,16 @@ public class CS4551_Quach {
 							}
 						}
 						try {
-							NLevelThresholdConverter converter = new NLevelThresholdConverter(result, level);
-							converter.applyAndDisplay();
-							converter.save(filename);
+							NLevelThresholdConverter thresholdConverter = new NLevelThresholdConverter(result, level);
+							thresholdConverter.applyAndDisplay();
+							thresholdConverter.save(filename);
+							
+							// Re-clone the original image.
+							result = image.clone();
+							
+							NLevelErrorDiffusionConverter errorDiffusionConverter = new NLevelErrorDiffusionConverter(result, level);
+							errorDiffusionConverter.applyAndDisplay();
+							errorDiffusionConverter.save(filename);
 						}
 						catch (Exception e) {
 							e.printStackTrace();

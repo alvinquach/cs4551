@@ -1,5 +1,6 @@
 package com.alvinquach.cs4551.homework1.utils.quantization;
 
+import com.alvinquach.cs4551.homework1.utils.math.MathUtils;
 import com.alvinquach.cs4551.homework1.utils.quantization.lookuptable.IntensityLUT;
 import com.alvinquach.cs4551.homework1.utils.quantization.lookuptable.LUTEntry;
 import com.alvinquach.cs4551.homework1.utils.quantization.lookuptable.LUTSegmentInfo;
@@ -12,7 +13,7 @@ public class QuantizationUtils {
 	public static IntensityLUT generateUniformIntensityLUT(int levels) {
 		
 		// Sanitize input
-		int steps = levels < 2 ? 2 : levels > 256 ? 256 : levels;
+		int steps = MathUtils.clamp(levels, 2, 256);
 		
 		IntensityLUT result = new IntensityLUT();
 		
@@ -31,7 +32,7 @@ public class QuantizationUtils {
 	public static IntensityLUT generateThresholdIntensityLUT(int levels) {
 		
 		// Sanitize input
-		int steps = levels < 2 ? 2 : levels > 256 ? 256 : levels;
+		int steps = MathUtils.clamp(levels, 2, 256);
 		
 		IntensityLUT result = new IntensityLUT();
 		
@@ -52,7 +53,7 @@ public class QuantizationUtils {
 	public static LUTSegmentInfo quantizeIntensityToLUT(int value, IntensityLUT lut) {
 		
 		// Sanitize inputs
-		value = value < 0 ? 0 : value > 255 ? 255 : value;
+		value = MathUtils.clamp(value, 0, 255);
 		
 		int i = 0;
 		for (LUTEntry entry : lut.getEntries()) {

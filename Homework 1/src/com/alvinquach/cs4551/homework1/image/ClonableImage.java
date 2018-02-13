@@ -24,8 +24,8 @@ public class ClonableImage extends Image implements Cloneable {
 	/** Returns a clone of this Image. */
 	public ClonableImage clone() {
 		ClonableImage newImage = new ClonableImage(img.getWidth(), img.getHeight());
-		for (int x = 0; x < img.getWidth(); x++) {
-			for (int y = 0; y < img.getHeight(); y++) {
+		for (int y = 0; y < img.getHeight(); y++) {
+			for (int x = 0; x < img.getWidth(); x++) {
 				newImage.setPixel(x, y, img.getRGB(x, y));
 			}
 		}
