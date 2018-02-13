@@ -22,22 +22,27 @@ public class MenuDisplay {
 		}
 		System.out.print("\n" + "Please enter the task number [1-" + mainMenuItems.length + "]:");
 	}
-	
+
+	/** Prints N request to the console. */
+	public void displayNRequest() {
+		System.out.println("Enter a value for N (must be a power of 2):");
+	}
+
 	/** Prints the syntax for running the application to the console. */
 	public void displayApplicationUsage(String applicationName) {
 		System.out.println("Usage: java " + applicationName + " <path to ppm file>\n");
 	}
-	
+
 	/** Prints file not found error to the console */
 	public void displayFileNotFound(String filePath) {
 		System.err.println("File \"" + filePath + "\" could not be found.");
 	}
-	
+
 	/** Prints invalid input choice to the console */
 	public void displayInvalidInput() {
 		System.out.println("Invalid input.");
 	}
-	
+
 	public int getMainMenuChoiceCount() {
 		return mainMenuItems.length;
 	}

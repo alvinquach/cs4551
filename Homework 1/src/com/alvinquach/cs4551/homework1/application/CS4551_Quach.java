@@ -2,21 +2,26 @@ package com.alvinquach.cs4551.homework1.application;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import com.alvinquach.cs4551.homework1.image.ClonableImage;
 import com.alvinquach.cs4551.homework1.image.Image;
 import com.alvinquach.cs4551.homework1.menu.MenuDisplay;
-import com.alvinquach.cs4551.homework1.operations.GrayscaleConvertor;
+import com.alvinquach.cs4551.homework1.operations.GrayscaleConverter;
+import com.alvinquach.cs4551.homework1.operations.NLevelThresholdConverter;
 
+/**
+ * @author Alvin Quach
+ */
 public class CS4551_Quach {
-
-	private static final String OUTPUT_FILE = "Result.ppm";
 
 	private static MenuDisplay menuDisplay = new MenuDisplay();
 
 	private static ClonableImage image;
+	
+	private static String filename;
 
 	public static void main(String[] args) {
 
@@ -26,6 +31,7 @@ public class CS4551_Quach {
 		}
 
 		try {
+			filename = Paths.get(args[0]).getFileName().toString().split("\\.")[0];
 			image = new ClonableImage(args[0]);
 		}
 		catch (FileNotFoundException e) {
@@ -55,6 +61,8 @@ public class CS4551_Quach {
 
 				// Exit if the last choice was picked.
 				else if (choice == menuDisplay.getMainMenuChoiceCount()) {
+					System.out.println("Exiting...");
+					System.exit(0);
 					break;
 				}
 
@@ -62,8 +70,36 @@ public class CS4551_Quach {
 					Image result = image.clone();
 					if (choice == 1) {
 						try {
-							new GrayscaleConvertor().applyAndDisplay(result);
-							result.write2PPM(OUTPUT_FILE);
+							GrayscaleConverter converter = new GrayscaleConverter(result);
+							converter.applyAndDisplay();
+							converter.save(filename);
+						}
+						catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+					else if (choice == 2) {
+						menuDisplay.displayNRequest();
+						int level = 0;
+						while (true) {
+							try {
+								level = sc.nextInt();
+								if (level != Integer.highestOneBit(level)) {
+									menuDisplay.displayInvalidInput();
+								}
+								else {
+									break;
+								}
+							}
+							catch (InputMismatchException e) {
+								menuDisplay.displayInvalidInput();
+								sc.nextLine();
+							}
+						}
+						try {
+							NLevelThresholdConverter converter = new NLevelThresholdConverter(result, level);
+							converter.applyAndDisplay();
+							converter.save(filename);
 						}
 						catch (Exception e) {
 							e.printStackTrace();
@@ -76,6 +112,7 @@ public class CS4551_Quach {
 			}
 			catch (InputMismatchException e) {
 				menuDisplay.displayInvalidInput();
+				sc.nextLine();
 			}
 		}
 		sc.close();

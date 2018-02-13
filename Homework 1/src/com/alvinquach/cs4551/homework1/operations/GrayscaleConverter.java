@@ -2,10 +2,14 @@ package com.alvinquach.cs4551.homework1.operations;
 
 import com.alvinquach.cs4551.homework1.image.Image;
 
-public class GrayscaleConvertor extends ImageOperation {
+public class GrayscaleConverter extends ImageOperation {
+	
+	public GrayscaleConverter(Image image) {
+		super(image);
+	}
 
 	@Override
-	public void apply(Image image) {
+	public void apply() {
 		for (int x = 0; x < image.getW(); x++) {
 			for (int y = 0; y < image.getH(); y++) {
 				int[] rgb = new int[3];
@@ -18,6 +22,11 @@ public class GrayscaleConvertor extends ImageOperation {
 	
 	private int toGrayscale(int[] rgb) {
 		return (int)Math.round(0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]);
+	}
+
+	@Override
+	protected String getFileSuffix() {
+		return "gray";
 	}
 
 }

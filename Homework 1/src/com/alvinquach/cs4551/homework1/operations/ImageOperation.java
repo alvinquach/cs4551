@@ -7,11 +7,25 @@ import com.alvinquach.cs4551.homework1.image.Image;
  */
 public abstract class ImageOperation {
 	
-	abstract public void apply(Image image);
+	protected Image image;
 	
-	public void applyAndDisplay(Image image) {
-		apply(image);
+	protected String fileSuffix;
+	
+	protected ImageOperation(Image image) {
+		this.image = image;
+	}
+	
+	abstract public void apply();
+	
+	public final void applyAndDisplay() {
+		apply();
 		image.display();
 	}
+	
+	public final void save(String name) {
+		image.write2PPM(name + "-" + getFileSuffix() + ".ppm");
+	}
+	
+	protected abstract String getFileSuffix();
 
 }
