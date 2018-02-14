@@ -59,13 +59,13 @@ public class LogarithmicColorQuantizer extends ImageOperation {
 	
 	@Override
 	public void save(String name) {
-		indexImage.write2PPM(name + "-log-index.ppm");
+		indexImage.write2PPM(name + "-index-2.ppm");
 		image.write2PPM(name + "-" + getFileSuffix() + ".ppm");
 	}
 
 	@Override
 	protected String getFileSuffix() {
-		return "log-QT8";
+		return "QT8-2";
 	}
 
 
