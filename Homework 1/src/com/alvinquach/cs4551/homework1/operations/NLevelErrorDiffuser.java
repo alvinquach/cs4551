@@ -36,7 +36,7 @@ public class NLevelErrorDiffuser extends ImageOperation {
 				image.getPixel(x, y, rgb);
 				int value = rgb[0];
 				int quantized = QuantizationUtils.getQuantizedIntensitySegment(value, quantizedIntensities).getValue();
-				image.setPixel(x, y, new int[]{quantized, quantized, quantized});
+				image.setPixel(x, y, new int[] {quantized, quantized, quantized});
 				int error = value - quantized;
 				distrubuteError(x, y, error);
 			}

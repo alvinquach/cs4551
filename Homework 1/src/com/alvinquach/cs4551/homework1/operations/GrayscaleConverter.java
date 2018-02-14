@@ -18,7 +18,7 @@ public class GrayscaleConverter extends ImageOperation {
 				int[] rgb = new int[3];
 				image.getPixel(x, y, rgb);
 				int intensity = toGrayscale(rgb);
-				image.setPixel(x, y, new int[]{intensity, intensity, intensity});
+				image.setPixel(x, y, new int[] {intensity, intensity, intensity});
 			}
 		}	
 	}

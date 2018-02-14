@@ -35,7 +35,7 @@ public class NLevelThresholdConverter extends ImageOperation {
 				int[] rgb = new int[3];
 				image.getPixel(x, y, rgb);
 				int quantized = QuantizationUtils.getQuantizedIntensitySegment(rgb[0], quantizedIntensities).getValue();
-				image.setPixel(x, y, new int[]{quantized, quantized, quantized});
+				image.setPixel(x, y, new int[] {quantized, quantized, quantized});
 			}
 		}	
 	}

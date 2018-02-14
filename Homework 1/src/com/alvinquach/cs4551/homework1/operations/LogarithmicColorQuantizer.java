@@ -38,7 +38,7 @@ public class LogarithmicColorQuantizer extends ImageOperation {
 						(QuantizationUtils.getQuantizedIntensitySegment(rgb[0], quantizedRedGreen).getIndex() << 5) + 
 						(QuantizationUtils.getQuantizedIntensitySegment(rgb[1], quantizedRedGreen).getIndex() << 2) +
 						QuantizationUtils.getQuantizedIntensitySegment(rgb[2], quantizedBlue).getIndex();
-				indexImage.setPixel(x, y, new int[]{index, index, index});
+				indexImage.setPixel(x, y, new int[] {index, index, index});
 			}
 		}
 		
@@ -51,7 +51,7 @@ public class LogarithmicColorQuantizer extends ImageOperation {
 				int[] rgb = new int[3];
 				indexImage.getPixel(x, y, rgb);
 				ColorRGB color = lut.get(rgb[0]);
-				image.setPixel(x, y, new int[]{color.getRed(), color.getGreen(), color.getBlue()});
+				image.setPixel(x, y, new int[] {color.getRed(), color.getGreen(), color.getBlue()});
 			}
 		}
 		
