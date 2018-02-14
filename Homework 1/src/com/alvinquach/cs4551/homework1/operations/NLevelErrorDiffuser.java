@@ -5,6 +5,9 @@ import com.alvinquach.cs4551.homework1.models.quantization.QuantizedIntensities;
 import com.alvinquach.cs4551.homework1.utils.MathUtils;
 import com.alvinquach.cs4551.homework1.utils.QuantizationUtils;
 
+/**
+ * @author Alvin Quach
+ */
 public class NLevelErrorDiffuser extends ImageOperation {
 
 	private int levels;

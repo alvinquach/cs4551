@@ -7,6 +7,9 @@ import com.alvinquach.cs4551.homework1.models.image.Image;
 import com.alvinquach.cs4551.homework1.models.quantization.QuantizedIntensities;
 import com.alvinquach.cs4551.homework1.utils.QuantizationUtils;
 
+/**
+ * @author Alvin Quach
+ */
 public class UniformColorQuantizer extends ImageOperation {
 
 	private Image indexImage;

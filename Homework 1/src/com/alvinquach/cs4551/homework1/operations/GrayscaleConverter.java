@@ -2,6 +2,9 @@ package com.alvinquach.cs4551.homework1.operations;
 
 import com.alvinquach.cs4551.homework1.models.image.ClonableImage;
 
+/**
+ * @author Alvin Quach
+ */
 public class GrayscaleConverter extends ImageOperation {
 
 	public GrayscaleConverter(ClonableImage image) {
