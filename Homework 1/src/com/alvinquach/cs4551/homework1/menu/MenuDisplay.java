@@ -11,6 +11,7 @@ public class MenuDisplay {
 			"Conversion to N-level Image",
 			"Conversion to 8bit Indexed Color Image using Uniform Color Quantization (24bits->8bits)",
 			"Conversion to 8bit Indexed Color Image using Logarithmic Color Quantization (24bits->8bits)",
+			"Conversion to 8bit Indexed Color Image using Hybrid Color Error Diffusion (24bits->8bits)",
 			"Quit"
 	};
 

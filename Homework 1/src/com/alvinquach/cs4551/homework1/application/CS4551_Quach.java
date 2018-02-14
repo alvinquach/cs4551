@@ -9,6 +9,7 @@ import java.util.Scanner;
 import com.alvinquach.cs4551.homework1.menu.MenuDisplay;
 import com.alvinquach.cs4551.homework1.models.image.ClonableImage;
 import com.alvinquach.cs4551.homework1.operations.GrayscaleConverter;
+import com.alvinquach.cs4551.homework1.operations.HybridErrorDiffuser;
 import com.alvinquach.cs4551.homework1.operations.ImageOperation;
 import com.alvinquach.cs4551.homework1.operations.LogarithmicColorQuantizer;
 import com.alvinquach.cs4551.homework1.operations.NLevelErrorDiffuser;
@@ -119,6 +120,7 @@ public class CS4551_Quach {
 						ImageOperation quantizer =
 								choice == 3 ? new UniformColorQuantizer(result) :
 								choice == 4 ? new LogarithmicColorQuantizer(result) :
+								choice == 5 ? new HybridErrorDiffuser(result) :
 								null;
 								
 						if (quantizer != null) {
