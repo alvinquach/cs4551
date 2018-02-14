@@ -31,6 +31,7 @@ public class ColorLUT {
 		int i = 0;
 		for (ColorRGB color : colors) {
 			result += i + "\t\t" + color.getRed() + "\t" + color.getGreen() + "\t" + color.getBlue() + "\n";
+			i++;
 		}
 		return result;
 	}

@@ -8,8 +8,9 @@ import java.util.Scanner;
 
 import com.alvinquach.cs4551.homework1.menu.MenuDisplay;
 import com.alvinquach.cs4551.homework1.models.image.ClonableImage;
-import com.alvinquach.cs4551.homework1.models.image.Image;
 import com.alvinquach.cs4551.homework1.operations.GrayscaleConverter;
+import com.alvinquach.cs4551.homework1.operations.ImageOperation;
+import com.alvinquach.cs4551.homework1.operations.LogarithmicColorQuantizer;
 import com.alvinquach.cs4551.homework1.operations.NLevelErrorDiffuser;
 import com.alvinquach.cs4551.homework1.operations.NLevelThresholdConverter;
 import com.alvinquach.cs4551.homework1.operations.UniformColorQuantizer;
@@ -114,19 +115,25 @@ public class CS4551_Quach {
 							e.printStackTrace();
 						}
 					}
-					else if (choice == 3) {
-						try {
-							UniformColorQuantizer quantizer = new UniformColorQuantizer(result);
-							quantizer.applyAndDisplay();
-							quantizer.save(filename);
+					else {
+						ImageOperation quantizer =
+								choice == 3 ? new UniformColorQuantizer(result) :
+								choice == 4 ? new LogarithmicColorQuantizer(result) :
+								null;
+								
+						if (quantizer != null) {
+							try {
+								quantizer.applyAndDisplay();
+								quantizer.save(filename);
+							}
+							catch (Exception e) {
+								e.printStackTrace();
+							}
 						}
-						catch (Exception e) {
-							e.printStackTrace();
-						}
-
-						// Display main menu again.
-						menuDisplay.displayMainMenu();
 					}
+
+					// Display main menu again.
+					menuDisplay.displayMainMenu();
 				}
 			}
 			catch (InputMismatchException e) {

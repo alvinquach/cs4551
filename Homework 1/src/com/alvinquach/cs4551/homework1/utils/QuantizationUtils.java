@@ -78,5 +78,37 @@ public class QuantizationUtils {
 		return null;
 		
 	}
+	
+	public static ColorLUT generateLogarithmicColorLUT() {
+		ColorLUT result = new ColorLUT();
+		QuantizedIntensities quantizedRedGreen = QuantizationUtils.generateLogarithmicQuantizedIntensities(8);
+		QuantizedIntensities quantizedBlue = QuantizationUtils.generateLogarithmicQuantizedIntensities(4);
+		for (QuantizationSegment redSegment : quantizedRedGreen.getSegments()) {
+			for (QuantizationSegment greenSegment : quantizedRedGreen.getSegments()) {
+				for (QuantizationSegment blueSegment : quantizedBlue.getSegments()) {
+					result.add(redSegment.getValue(), greenSegment.getValue(), blueSegment.getValue());
+				}
+			}
+		}
+		return result;
+	}
+	
+	public static QuantizedIntensities generateLogarithmicQuantizedIntensities(int levels) {
+		
+		// Sanitize input
+		int steps = MathUtils.clamp(levels, 2, 256);
+		
+		QuantizedIntensities result = new QuantizedIntensities();
+		
+		int stepSize = 128 / steps;
+		
+		for (int i = 1; i <= 2 * steps; i += 2) {
+			int max = (int)(Math.log((i + 1) * stepSize) / Math.log(255) * 255);
+			int value = (int)(Math.log(i * stepSize) / Math.log(255) * 255);
+			result.getSegments().add(new QuantizationSegment(max, value));
+		}
+		
+		return result;
+	}
 
 }

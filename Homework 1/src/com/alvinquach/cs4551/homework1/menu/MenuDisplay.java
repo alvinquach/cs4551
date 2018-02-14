@@ -10,7 +10,7 @@ public class MenuDisplay {
 			"Conversion to Gray-scale Image (24bits->8bits)",
 			"Conversion to N-level Image",
 			"Conversion to 8bit Indexed Color Image using Uniform Color Quantization (24bits->8bits)",
-			"Conversion to 8bit Indexed Color Image using [your selected method] (24bits->8bits)", 
+			"Conversion to 8bit Indexed Color Image using Logarithmic Color Quantization (24bits->8bits)",
 			"Quit"
 	};
 
