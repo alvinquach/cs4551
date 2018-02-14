@@ -82,11 +82,11 @@ public class CS4551_Quach {
 					}
 					else if (choice == 2) {
 						menuDisplay.displayNRequest();
-						int level = 0;
+						int levels = 0;
 						while (true) {
 							try {
-								level = sc.nextInt();
-								if (level != Integer.highestOneBit(level)) {
+								levels = sc.nextInt();
+								if (levels != Integer.highestOneBit(levels) || levels > 128) {
 									menuDisplay.displayInvalidInput();
 								}
 								else {
@@ -99,14 +99,14 @@ public class CS4551_Quach {
 							}
 						}
 						try {
-							NLevelThresholdConverter thresholdConverter = new NLevelThresholdConverter(result, level);
+							NLevelThresholdConverter thresholdConverter = new NLevelThresholdConverter(result, levels);
 							thresholdConverter.applyAndDisplay();
 							thresholdConverter.save(filename);
 
 							// Re-clone the original image.
 							result = image.clone();
 
-							NLevelErrorDiffuser errorDiffusionConverter = new NLevelErrorDiffuser(result, level);
+							NLevelErrorDiffuser errorDiffusionConverter = new NLevelErrorDiffuser(result, levels);
 							errorDiffusionConverter.applyAndDisplay();
 							errorDiffusionConverter.save(filename);
 						}

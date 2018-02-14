@@ -25,7 +25,7 @@ public class MenuDisplay {
 
 	/** Prints N request to the console. */
 	public void displayNRequest() {
-		System.out.println("Enter a value for N (must be a power of 2):");
+		System.out.println("Enter a value for N (must be a power of 2, maximum 128):");
 	}
 
 	/** Prints the syntax for running the application to the console. */

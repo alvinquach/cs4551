@@ -10,7 +10,7 @@ import com.alvinquach.cs4551.homework1.models.quantization.QuantizedIntensities;
  */
 public class QuantizationUtils {
 	
-public static ColorLUT generateUniformColorLUT() {
+	public static ColorLUT generateUniformColorLUT() {
 		ColorLUT result = new ColorLUT();
 		QuantizedIntensities quantizedRedGreen = QuantizationUtils.generateUniformQuantizedIntensities(8);
 		QuantizedIntensities quantizedBlue = QuantizationUtils.generateUniformQuantizedIntensities(4);
@@ -31,13 +31,12 @@ public static ColorLUT generateUniformColorLUT() {
 		
 		QuantizedIntensities result = new QuantizedIntensities();
 		
-		int stepSize = 255 / steps;
+		int stepSize = 128 / steps;
 		
-		int prevMax = 0;
-		for (int i = 0; i < steps; i++) {
-			int max = (i + 1) * stepSize + i;
-			result.getSegments().add(new QuantizationSegment(max, (prevMax + max) / 2 + 1));
-			prevMax = max;
+		for (int i = 1; i <= 2 * steps; i += 2) {
+			int max = (i + 1) * stepSize;
+			int value = i * stepSize;
+			result.getSegments().add(new QuantizationSegment(max, value));
 		}
 		
 		return result;
@@ -47,14 +46,16 @@ public static ColorLUT generateUniformColorLUT() {
 		
 		// Sanitize input
 		int steps = MathUtils.clamp(levels, 2, 256);
-		
+
 		QuantizedIntensities result = new QuantizedIntensities();
 		
-		int prevMax = -127 / (steps - 1);
-		for (int i = 0; i < steps; i++) {
-			int max = (int)((i + 0.5) * 255 / (steps - 1)); // Have to perform decimal calculation in order to avoid rounding errors.
-			result.getSegments().add(new QuantizationSegment(max, (prevMax + max + 1) / 2));
-			prevMax = max;
+		// Have to perform decimal calculation in order to avoid rounding errors.
+		float stepSize = 127.5f / (steps - 1);
+		
+		for (int i = 0; i < 2 * steps; i += 2) {
+			int max = (int)((i + 1) * stepSize);
+			int value = (int)(i * stepSize);
+			result.getSegments().add(new QuantizationSegment(max, value));
 		}
 		
 		return result;
