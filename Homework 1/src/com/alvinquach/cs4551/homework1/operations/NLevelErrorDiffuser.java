@@ -2,6 +2,7 @@ package com.alvinquach.cs4551.homework1.operations;
 
 import com.alvinquach.cs4551.homework1.models.image.ClonableImage;
 import com.alvinquach.cs4551.homework1.models.quantization.QuantizedIntensities;
+import com.alvinquach.cs4551.homework1.utils.ErrorDiffusionUtils;
 import com.alvinquach.cs4551.homework1.utils.MathUtils;
 import com.alvinquach.cs4551.homework1.utils.QuantizationUtils;
 
@@ -38,48 +39,9 @@ public class NLevelErrorDiffuser extends ImageOperation {
 				int quantized = QuantizationUtils.getQuantizedIntensitySegment(value, quantizedIntensities).getValue();
 				image.setPixel(x, y, new int[] {quantized, quantized, quantized});
 				int error = value - quantized;
-				distrubuteError(x, y, error);
+				ErrorDiffusionUtils.distrubuteError(image, x, y, error);
 			}
 		}	
-	}
-
-	private void distrubuteError(int x, int y, int error) {
-		int[] rgb = new int[3];
-
-		// Bottom pixels
-		if (y < image.getH() - 1) {
-
-			// Bottom left pixel
-			if (x > 0) {
-				image.getPixel(x - 1, y + 1, rgb);
-				int value = rgb[0];
-				int newValue = MathUtils.clamp(value + error * 3 / 16, 0, 255);
-				image.setPixel(x - 1, y + 1, new int[]{newValue, newValue, newValue});
-			}
-
-			// Bottom right pixel
-			if (x < image.getW() - 1) {
-				image.getPixel(x + 1, y + 1, rgb);
-				int value = rgb[0];
-				int newValue = MathUtils.clamp(value + error * 1 / 16, 0, 255);
-				image.setPixel(x + 1, y + 1, new int[]{newValue, newValue, newValue});
-			}
-
-			// Bottom center pixel
-			image.getPixel(x, y + 1, rgb);
-			int value = rgb[0];
-			int newValue = MathUtils.clamp(value + error * 5 / 16, 0, 255);
-			image.setPixel(x, y + 1, new int[]{newValue, newValue, newValue});
-		}
-
-		// Right pixel
-		if (x < image.getW() - 1) {
-			image.getPixel(x + 1, y, rgb);
-			int value = rgb[0];
-			int newValue = MathUtils.clamp(value + error * 7 / 16, 0, 255);
-			image.setPixel(x + 1, y, new int[]{newValue, newValue, newValue});
-		}
-
 	}
 
 	@Override
