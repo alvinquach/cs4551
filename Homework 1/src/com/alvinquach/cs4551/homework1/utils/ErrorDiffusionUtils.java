@@ -25,7 +25,7 @@ public class ErrorDiffusionUtils {
 			if (x > 0) {
 				image.getPixel(x - 1, y + 1, rgb);
 				for (int i = 0; i < 3; i++) {
-					rgb[i] =  MathUtils.clamp(rgb[i] + error[i] * 3 / 16, 0, 255);
+					rgb[i] = MathUtils.clamp(rgb[i] + error[i] * 3 / 16, 0, 255);
 				}
 				image.setPixel(x - 1, y + 1, rgb);
 			}
@@ -34,7 +34,7 @@ public class ErrorDiffusionUtils {
 			if (x < image.getW() - 1) {
 				image.getPixel(x + 1, y + 1, rgb);
 				for (int i = 0; i < 3; i++) {
-					rgb[i] =  MathUtils.clamp(rgb[i] + error[i] * 1 / 16, 0, 255);
+					rgb[i] = MathUtils.clamp(rgb[i] + error[i] * 1 / 16, 0, 255);
 				}
 				image.setPixel(x + 1, y + 1, rgb);
 			}
@@ -42,7 +42,7 @@ public class ErrorDiffusionUtils {
 			// Bottom center pixel
 			image.getPixel(x, y + 1, rgb);
 			for (int i = 0; i < 3; i++) {
-				rgb[i] =  MathUtils.clamp(rgb[i] + error[i] * 5 / 16, 0, 255);
+				rgb[i] = MathUtils.clamp(rgb[i] + error[i] * 5 / 16, 0, 255);
 			}
 			image.setPixel(x, y + 1, rgb);
 		}
@@ -51,7 +51,7 @@ public class ErrorDiffusionUtils {
 		if (x < image.getW() - 1) {
 			image.getPixel(x + 1, y, rgb);
 			for (int i = 0; i < 3; i++) {
-				rgb[i] =  MathUtils.clamp(rgb[i] + error[i] * 7 / 16, 0, 255);
+				rgb[i] = MathUtils.clamp(rgb[i] + error[i] * 7 / 16, 0, 255);
 			}
 			image.setPixel(x + 1, y, rgb);
 		}
