@@ -5,7 +5,7 @@ import homework2.models.image.Image;
 /**
  * @author Alvin Quach
  */
-public class DrawUtils {
+public class ImageUtils {
 	
 	/**
 	 * Replaces the contents of the provided {@code Image} with circles of specified M and N.
@@ -62,6 +62,14 @@ public class DrawUtils {
 		}
 		
 		return image;
+	}
+	
+	public static int[] getBoundarySafePixel(Image image, int x, int y) {
+		int[] result = new int[3];
+		x = MathUtils.clamp(x, 0, image.getW() - 1);
+		y = MathUtils.clamp(y, 0, image.getH() - 1);
+		image.getPixel(x, y, result);
+		return result;
 	}
 
 }

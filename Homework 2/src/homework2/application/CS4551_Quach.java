@@ -4,7 +4,10 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import homework2.models.image.ClonableImage;
-import homework2.utils.DrawUtils;
+import homework2.models.image.Image;
+import homework2.resampler.Convolution3x3Downsampler;
+import homework2.resampler.NearestNeighborDownsampler;
+import homework2.utils.ImageUtils;
 
 /**
  * @author Alvin Quach
@@ -114,9 +117,21 @@ public class CS4551_Quach {
 						}
 						
 						int dim = (int)Math.pow(2, AppConstants.CIRCLE_IMG_DIM);
-						ClonableImage image = (ClonableImage)DrawUtils.DrawCircles(M, N, new ClonableImage(dim, dim));
-						
+						Image image = ImageUtils.DrawCircles(M, N, new ClonableImage(dim, dim));
 						image.display();
+						
+						// Nearest neighbor
+						Image ds1 = new NearestNeighborDownsampler().resample(image, K);
+						ds1.display();
+						
+						// Box blur
+						Image ds2 = new Convolution3x3Downsampler(1, 1, 1, 1, 1, 1, 1, 1, 1).resample(image, K);
+						ds2.display();
+						
+						// Gaussian blur
+						Image ds3 = new Convolution3x3Downsampler(1, 2, 1, 2, 4, 2, 1, 2, 1).resample(image, K);
+						ds3.display();
+						
 					}
 
 					// Dictionary Coding
