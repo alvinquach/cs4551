@@ -28,7 +28,7 @@ public class LzwEncoder {
 
 	public void setInput(String input) {
 		this.input = input;
-		encode(input);
+		encode();
 	}
 	
 	public List<String> getDictionary() {
@@ -52,7 +52,7 @@ public class LzwEncoder {
 		System.out.println(PrintUtils.formatByteArray(getEncodedBytes()));
 	}
 
-	private void encode(String input) {
+	private void encode() {
 		
 		// Clear any existing entries.
 		dictionary.clear();
