@@ -30,15 +30,25 @@ public class MenuDisplay {
 	public void displayAliasingSubmenu(char varName, String desc) {
 		System.out.println("Enter a value for " + varName + (desc == null ? "" : " (" + desc + ")") + ":");
 	}
+	
+	/** Prints the request for the filename/path. */
+	public void displayFilePathRequest() {
+		System.out.println("Enter the path to the file: ");
+	}
 
 	/** Prints the syntax for running the application to the console. */
 	public void displayApplicationUsage(String applicationName) {
-		System.out.println("Usage: java " + applicationName + " <path to ppm file>\n");
+		System.out.println("Usage: java " + applicationName + "\n");
+	}
+	
+	/** Prints file not found error to the console */
+	public void displayFileNotFound(String filePath) {
+		displayFileNotFound(filePath, "");
 	}
 
 	/** Prints file not found error to the console */
-	public void displayFileNotFound(String filePath) {
-		System.err.println("File \"" + filePath + "\" could not be found.");
+	public void displayFileNotFound(String filePath, String additional) {
+		System.out.println("File \"" + filePath + "\" could not be found. " + additional);
 	}
 
 	/** Prints invalid input choice to the console */
