@@ -1,14 +1,18 @@
 package homework2.application;
 
-import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import homework2.compression.lzw.LzwEncoder;
 import homework2.models.image.ClonableImage;
 import homework2.models.image.Image;
 import homework2.resampler.Convolution3x3Downsampler;
 import homework2.resampler.NearestNeighborDownsampler;
+import homework2.utils.FileUtils;
 import homework2.utils.ImageUtils;
 
 /**
@@ -135,9 +139,20 @@ public class CS4551_Quach {
 						menuDisplay.displayFilePathRequest();
 
 						String filename = sc.next();
-						File file = Paths.get(filename).toFile();
-						if (!file.exists()) {
+						
+						Path path = Paths.get(filename);
+						try {
+							String fileContents = FileUtils.readPlainTextFile(path);
+							System.out.println(fileContents);
+							LzwEncoder encoder = new LzwEncoder(fileContents);
+							encoder.printDictionary();
+							encoder.printEncodedBytes();
+						}
+						catch (FileNotFoundException e) {
 							menuDisplay.displayFileNotFound(filename, "Returning to main menu.");
+						}
+						catch (IOException e) {
+							e.printStackTrace();
 						}
 					}
 
