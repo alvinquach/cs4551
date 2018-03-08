@@ -1,7 +1,6 @@
 package homework2.application;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -110,18 +109,22 @@ public class CS4551_Quach {
 						int dim = (int)Math.pow(2, AppConstants.CIRCLE_IMG_DIM);
 						Image image = ImageUtils.DrawCircles(M, N, new ClonableImage(dim, dim));
 						image.display();
+						image.write2PPM("Circle_" + M + "_" + N + ".ppm");
 
 						// Nearest neighbor
 						Image ds1 = new NearestNeighborDownsampler().resample(image, K);
 						ds1.display();
+						ds1.write2PPM("Circle_" + M + "_" + N + "_K" + K + "_NoFilter.ppm");
 
 						// Box blur
 						Image ds2 = new Convolution3x3Downsampler(1, 1, 1, 1, 1, 1, 1, 1, 1).resample(image, K);
 						ds2.display();
+						ds2.write2PPM("Circle_" + M + "_" + N + "_K" + K + "_BoxFilter.ppm");
 
 						// Gaussian blur
 						Image ds3 = new Convolution3x3Downsampler(1, 2, 1, 2, 4, 2, 1, 2, 1).resample(image, K);
 						ds3.display();
+						ds3.write2PPM("Circle_" + M + "_" + N + "_K" + K + "_GaussianFilter.ppm");
 
 					}
 
