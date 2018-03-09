@@ -3,6 +3,7 @@ package homework2.compression.lzw;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import homework2.utils.PrintUtils;
 
@@ -18,23 +19,39 @@ public class LzwEncoder {
 	
 	private List<Byte> encodedBytes = new LinkedList<>();
 	
+	/** 
+	 * Encodes the input string. The encoded input string and 
+	 * dictionary can be retrieved through member methods.
+	 * @param input The string to encode.
+	 */
 	public LzwEncoder(String input) {
 		setInput(input);
 	}
 
+	/** Retrieves that last string that was encoded. */
 	public String getInput() {
 		return input;
 	}
 
+	/** Encode a new string. Dictionary and encoded string will be updated automatically. */
 	public void setInput(String input) {
 		this.input = input;
 		encode();
 	}
 	
+	/** Returns a copy of the entire dictionary. */
 	public List<String> getDictionary() {
 		return new ArrayList<>(dictionary);
 	}
+	
+	/** Returns just the dictionary entries that contain blocks of length one. */
+	public List<String> getInitialDictionarySymbols() {
+		return dictionary.stream()
+				.filter(s -> s.length() == 1)
+				.collect(Collectors.toList());
+	}
 
+	/** Returns the encoded string in the form of a byte array. */
 	public byte[] getEncodedBytes() {
 		byte[] bytes = new byte[encodedBytes.size()];
 		int i = 0;
@@ -93,9 +110,12 @@ public class LzwEncoder {
 					
 				}
 				else {
+					
+					// Only add new dictionary entries if its not already full.
 					if (dictionary.size() < LzwProperties.MAX_DICT_SIZE) {
 						dictionary.add(nextSequence);
 					}
+					
 					encodedBytes.add((byte)(dictionary.indexOf(sequence)));
 					break;
 				}
