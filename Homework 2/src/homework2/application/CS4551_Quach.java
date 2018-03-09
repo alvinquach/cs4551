@@ -62,11 +62,11 @@ public class CS4551_Quach {
 					if (choice == 1) {
 						int N = 0, M = 0, K = 0;
 
-						// Request N
-						menuDisplay.displayAliasingSubmenu('N', "difference in successive radii");
+						// Request M
+						menuDisplay.displayAliasingSubmenu('M', "thickness");
 						while (true) {
 							try {
-								N = sc.nextInt();
+								M = sc.nextInt();
 								// TODO Add sanity checks.
 								break;
 							}
@@ -75,12 +75,12 @@ public class CS4551_Quach {
 								sc.nextLine();
 							}
 						}
-
-						// Request M
-						menuDisplay.displayAliasingSubmenu('M', "thickness");
+						
+						// Request N
+						menuDisplay.displayAliasingSubmenu('N', "difference in successive radii");
 						while (true) {
 							try {
-								M = sc.nextInt();
+								N = sc.nextInt();
 								// TODO Add sanity checks.
 								break;
 							}
