@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import homework2.application.AppConstants;
 import homework2.utils.PrintUtils;
 
 /**
@@ -112,7 +113,7 @@ public class LzwEncoder {
 				else {
 					
 					// Only add new dictionary entries if its not already full.
-					if (dictionary.size() < LzwProperties.MAX_DICT_SIZE) {
+					if (dictionary.size() < AppConstants.MAX_DICT_SIZE) {
 						dictionary.add(nextSequence);
 					}
 					
