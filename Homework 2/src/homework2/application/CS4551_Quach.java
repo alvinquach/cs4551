@@ -163,6 +163,9 @@ public class CS4551_Quach {
 							String filename = path.getFileName().toString();
 							String results = PrintUtils.formatLzwResults(fileContents, encoder.getDictionary(), encodedBytes, decoder.getDecodedString(), filename);
 							System.out.println(results);
+							
+							int extensionDelimiterIndex = filename.lastIndexOf('.');
+							filename = extensionDelimiterIndex < 0 ? filename : (filename.substring(0, extensionDelimiterIndex) + "_output.txt");
 							FileUtils.writeToFile(results, Paths.get(filename));
 							
 						}
