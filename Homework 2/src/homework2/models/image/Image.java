@@ -135,7 +135,7 @@ public abstract class Image
 	}
 
 	// read Comment line
-	String commentString = fis.readLine();
+	@SuppressWarnings("unused") String commentString = fis.readLine();
 
 	// read width & height
 	String[] WidthHeight = fis.readLine().split(" ");
