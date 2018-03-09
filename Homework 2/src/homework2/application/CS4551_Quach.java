@@ -138,7 +138,13 @@ public class CS4551_Quach {
 						// Request the filename/path
 						menuDisplay.displayFilePathRequest();
 
-						String filename = sc.next();
+						String filename = "";
+						while (sc.hasNextLine()) {
+							filename = sc.nextLine();
+							if (!filename.isEmpty()) {
+								break;
+							}
+						}
 						
 						Path path = Paths.get(filename);
 						try {
