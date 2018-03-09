@@ -71,7 +71,7 @@ public class LzwEncoder {
 
 	private void encode() {
 		
-		// Clear any existing entries.
+		// Clear any existing data.
 		dictionary.clear();
 		encodedBytes.clear();
 		

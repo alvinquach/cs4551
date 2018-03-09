@@ -7,6 +7,7 @@ import java.nio.file.Paths;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import homework2.compression.lzw.LzwDecoder;
 import homework2.compression.lzw.LzwEncoder;
 import homework2.models.image.ClonableImage;
 import homework2.models.image.Image;
@@ -14,6 +15,7 @@ import homework2.resampler.Convolution3x3Downsampler;
 import homework2.resampler.NearestNeighborDownsampler;
 import homework2.utils.FileUtils;
 import homework2.utils.ImageUtils;
+import homework2.utils.PrintUtils;
 
 /**
  * @author Alvin Quach
@@ -21,10 +23,6 @@ import homework2.utils.ImageUtils;
 public class CS4551_Quach {
 
 	private static MenuDisplay menuDisplay = new MenuDisplay();
-
-	//	private static ClonableImage image;
-	//
-	//	private static String filename;
 
 	public static void main(String[] args) {
 
@@ -138,24 +136,38 @@ public class CS4551_Quach {
 						// Request the filename/path
 						menuDisplay.displayFilePathRequest();
 
-						String filename = "";
+						String filePath = "";
 						while (sc.hasNextLine()) {
-							filename = sc.nextLine();
-							if (!filename.isEmpty()) {
+							filePath = sc.nextLine();
+							if (!filePath.isEmpty()) {
 								break;
 							}
 						}
 						
-						Path path = Paths.get(filename);
+						Path path = Paths.get(filePath);
 						try {
+							
+							// Read contents from file.
 							String fileContents = FileUtils.readPlainTextFile(path);
-							System.out.println(fileContents);
+							
+							// Encode the file contents.
 							LzwEncoder encoder = new LzwEncoder(fileContents);
-							encoder.printDictionary();
-							encoder.printEncodedBytes();
+							
+							// Get the encoded byte array.
+							byte[] encodedBytes = encoder.getEncodedBytes();
+							
+							// Decode the byte array using the initial dictionary containing the single symbol entries.
+							LzwDecoder decoder = new LzwDecoder(encodedBytes, encoder.getInitialDictionarySymbols());
+							
+							// Print and write results to file.
+							String filename = path.getFileName().toString();
+							String results = PrintUtils.formatLzwResults(fileContents, encoder.getDictionary(), encodedBytes, decoder.getDecodedString(), filename);
+							System.out.println(results);
+							FileUtils.writeToFile(results, Paths.get(filename));
+							
 						}
 						catch (FileNotFoundException e) {
-							menuDisplay.displayFileNotFound(filename, "Returning to main menu.");
+							menuDisplay.displayFileNotFound(filePath, "Returning to main menu.");
 						}
 						catch (IOException e) {
 							e.printStackTrace();
