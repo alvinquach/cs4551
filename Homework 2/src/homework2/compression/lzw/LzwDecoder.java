@@ -3,6 +3,8 @@ package homework2.compression.lzw;
 import java.util.ArrayList;
 import java.util.List;
 
+import homework2.application.AppConstants;
+
 /**
  * Decodes a byte array that was encoded using the LZW algorithm.
  * @author Alvin Quach
@@ -70,6 +72,12 @@ public class LzwDecoder {
 			// Add entry at the index from the dictionary to decoded string.
 			String entry = dictionary.get(input[index] & 0xFF);
 			decodedString.append(entry);
+			
+			// If the dictionary size is already maxed out, then skip to the next index.
+			// The rest of the code in this for-loop is for adding more dictionary entries.
+			if (dictionary.size() >= AppConstants.MAX_DICT_SIZE) {
+				continue;
+			}
 			
 			if (index + 1 < input.length) {
 				
