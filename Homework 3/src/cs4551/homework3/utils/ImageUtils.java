@@ -7,7 +7,7 @@ import cs4551.homework3.models.image.Image;
  * @author Alvin Quach
  */
 public class ImageUtils {
-	
+
 	/**
 	 * Pads an {@code Image} such that the width and height are multiples of the specified number.
 	 * The padded pixels will be black (0, 0, 0), and a new instance of an {@code Image} will be returned.
@@ -16,12 +16,12 @@ public class ImageUtils {
 	 * @return A new {@code Image} instance with padded pixels.
 	 */
 	public static Image padImage(Image source, int multiple) {
-		
+
 		int paddedWidth = source.getW() + (source.getW() % multiple > 0 ? multiple : 0);
 		int paddedHeight = source.getH() + (source.getH() % multiple > 0 ? multiple : 0);
-		
+
 		Image result = new ClonableImage(paddedWidth, paddedHeight);
-		
+
 		int[] rgb = new int[3];
 		for (int y = 0; y < source.getH(); y++) {
 			for (int x = 0; x < source.getW(); x++) {
@@ -29,10 +29,10 @@ public class ImageUtils {
 				result.setPixel(x, y, rgb);
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Crops an image to an area.
 	 * @param source The {@code Image} to be cropped.
@@ -43,15 +43,15 @@ public class ImageUtils {
 	 * @return A new {@code Image} instance containing the cropped area.
 	 */
 	public static Image cropImage(Image source, int startX, int startY, int width, int height) {
-		
+
 		// Sanitize inputs
 		startX = MathUtils.clamp(startX, 0, source.getW() - 2);
 		startY = MathUtils.clamp(startY, 0, source.getH() - 2);
 		width = MathUtils.clamp(width, 1, source.getW() - startX - 1);
 		height = MathUtils.clamp(height, 1, source.getH() - startY - 1);
-		
+
 		Image result = new ClonableImage(width, height);
-		
+
 		int[] rgb = new int[3];
 		for (int y = startY; y < height + startY; y++) {
 			for (int x = startX; x < width + startX; x++) {
@@ -59,7 +59,7 @@ public class ImageUtils {
 				result.setPixel(x, y, rgb);
 			}
 		}
-		
+
 		return result;
 	}
 

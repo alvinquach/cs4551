@@ -29,7 +29,6 @@ public class CS4551_Quach {
 
 		try {
 			
-			
 			filename = Paths.get(args[0]).getFileName().toString().split("\\.")[0];
 			
 			// Read image
@@ -49,6 +48,7 @@ public class CS4551_Quach {
 			// Step D5. Restore the original size
 			Image decompressedImage = ImageUtils.cropImage(rgbImage, 0, 0, sourceImage.getW(), sourceImage.getH());
 			decompressedImage.display("Step D5 Result");
+			
 			
 		}
 		catch (FileNotFoundException e) {
