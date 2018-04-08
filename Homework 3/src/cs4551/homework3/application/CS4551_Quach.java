@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 
 import cs4551.homework3.models.image.ClonableImage;
 import cs4551.homework3.models.image.Image;
+import cs4551.homework3.models.image.dct.DCTBlock;
 import cs4551.homework3.models.image.ycbcr.ChromaSubsampling;
 import cs4551.homework3.models.image.ycbcr.YCbCrImage;
 import cs4551.homework3.utils.ImageUtils;
@@ -59,12 +60,6 @@ public class CS4551_Quach {
 			System.err.println(e.getMessage());
 			System.exit(1);
 		}
-
-		run();
-
-	}
-
-	private static void run() {
 
 	}
 
