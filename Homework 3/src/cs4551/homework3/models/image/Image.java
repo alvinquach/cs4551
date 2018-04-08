@@ -218,13 +218,19 @@ public abstract class Image
 		System.err.println(e.getMessage());
 	}
   }
+  
+  public void display() {
+	  display(null);
+  }
 
-  public void display()
+  public void display(String title)
   // display the image on the screen
   {
      // Use a label to display the image
       //String title = "Image Name - " + fileName;
-      String title = fileName;
+      if (title == null) {
+    	  title = fileName;
+      }
       JFrame frame = new JFrame(title);
       JLabel label = new JLabel(new ImageIcon(img));
       frame.add(label, BorderLayout.CENTER);
