@@ -32,5 +32,35 @@ public class ImageUtils {
 		
 		return result;
 	}
+	
+	/**
+	 * Crops an image to an area.
+	 * @param source The {@code Image} to be cropped.
+	 * @param startX The x-coordinate of the top-left corner of the crop area.
+	 * @param startY The y-coordinate of the top-left corner of the crop area.
+	 * @param width The width of the crop area.
+	 * @param height The height of the crop area.
+	 * @return A new {@code Image} instance containing the cropped area.
+	 */
+	public static Image cropImage(Image source, int startX, int startY, int width, int height) {
+		
+		// Sanitize inputs
+		startX = MathUtils.clamp(startX, 0, source.getW() - 2);
+		startY = MathUtils.clamp(startY, 0, source.getH() - 2);
+		width = MathUtils.clamp(width, 1, source.getW() - startX - 1);
+		height = MathUtils.clamp(height, 1, source.getH() - startY - 1);
+		
+		Image result = new ClonableImage(width, height);
+		
+		int[] rgb = new int[3];
+		for (int y = startY; y < height + startY; y++) {
+			for (int x = startX; x < width + startX; x++) {
+				source.getPixel(x, y, rgb);
+				result.setPixel(x, y, rgb);
+			}
+		}
+		
+		return result;
+	}
 
 }

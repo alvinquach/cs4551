@@ -25,9 +25,21 @@ public class CS4551_Quach {
 		}
 
 		try {
+			
+			
 			filename = Paths.get(args[0]).getFileName().toString().split("\\.")[0];
-			Image img = new ClonableImage(args[0]);
-			sourceImage = ImageUtils.padImage(img, 8);
+			
+			// Read image
+			sourceImage = new ClonableImage(args[0]);
+			
+			// Step E1. Resize the input
+			Image resizedImage = ImageUtils.padImage(sourceImage, 8);
+			resizedImage.display();
+			
+			// Step D5. Restore the original size
+			Image decompressedImage = ImageUtils.cropImage(resizedImage, 0, 0, sourceImage.getW(), sourceImage.getH());
+			decompressedImage.display();
+			
 		}
 		catch (FileNotFoundException e) {
 			System.err.println("File " + args[0] + "not found.");
