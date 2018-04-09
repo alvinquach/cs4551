@@ -2,6 +2,7 @@ package cs4551.homework3.models.image.ycbcr;
 
 import cs4551.homework3.models.image.rgb.ClonableImage;
 import cs4551.homework3.models.image.rgb.Image;
+import cs4551.homework3.utils.ImageUtils;
 import cs4551.homework3.utils.MathUtils;
 
 public class YCbCrImage {
@@ -36,8 +37,8 @@ public class YCbCrImage {
 
 		luma = new float[width][height];
 
-		int chromaWidth =  subsampling.getH() * width / 4 ;
-		int chromaHeight = subsampling.getV() == 0 ? height / 2 : height;
+		int chromaWidth = ImageUtils.getChromaWidth(width, subsampling);
+		int chromaHeight = ImageUtils.getChromaHeight(height, subsampling);
 
 		cb = new float[chromaWidth][chromaHeight];
 		cr = new float[chromaWidth][chromaHeight];
@@ -165,7 +166,7 @@ public class YCbCrImage {
 				// Round and clamp RGB components
 				int[] rgb = new int[3];
 				for (int i = 0; i < 3; i++) {
-					rgb[i] = MathUtils.clamp((int)Math.round(rgbFloats[i]), 0, 255);
+					rgb[i] = MathUtils.clamp(Math.round(rgbFloats[i]), 0, 255);
 				}
 
 				// Set pixel value

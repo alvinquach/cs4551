@@ -2,12 +2,14 @@ package cs4551.homework3.utils;
 
 import cs4551.homework3.models.image.rgb.ClonableImage;
 import cs4551.homework3.models.image.rgb.Image;
+import cs4551.homework3.models.image.ycbcr.ChromaSubsampling;
 
 /**
  * @author Alvin Quach
  */
 public class ImageUtils {
 
+	
 	/**
 	 * Pads an {@code Image} such that the width and height are multiples of the specified number.
 	 * The padded pixels will be black (0, 0, 0), and a new instance of an {@code Image} will be returned.
@@ -36,6 +38,7 @@ public class ImageUtils {
 		return result;
 	}
 
+	
 	/**
 	 * Crops an image to an area.
 	 * @param source The {@code Image} to be cropped.
@@ -64,6 +67,18 @@ public class ImageUtils {
 		}
 
 		return result;
+	}
+	
+	
+	/** Calculates the width of the chroma components given the width of the luma component and the subsampling rate. */
+	public static int getChromaWidth(int width, ChromaSubsampling subsampling) {
+		return subsampling.getH() * width / 4;
+	}
+	
+	
+	/** Calculates the height of the chroma components given the height of the luma component and the subsampling rate. */
+	public static int getChromaHeight(int height, ChromaSubsampling subsampling) {
+		return subsampling.getV() == 0 ? height / 2 : height;
 	}
 
 }

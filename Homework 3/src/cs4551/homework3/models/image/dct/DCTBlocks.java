@@ -4,7 +4,7 @@ import cs4551.homework3.models.image.ImageConstants;
 
 public class DCTBlocks {
 	
-	public static final int BLOCK_SIZE = ImageConstants.JPEG_BLOCK_SIZE;
+	private static final int BLOCK_SIZE = ImageConstants.JPEG_BLOCK_SIZE;
 	
 	private DCTBlock[] dctBlocks;
 	
@@ -12,6 +12,13 @@ public class DCTBlocks {
 	
 	private int vBlockCount;
 	
+	public DCTBlocks(DCTBlock[] dctBlocks, int hBlockCount, int vBlockCount) {
+		this.dctBlocks = dctBlocks;
+		this.hBlockCount = hBlockCount;
+		this.vBlockCount = vBlockCount;
+	}
+
+	/** Breaks an image component into multiple DCT blocks. */
 	public DCTBlocks(float[][] component) throws Exception {
 			
 		hBlockCount = (int)Math.ceil(component.length / (double)BLOCK_SIZE);
@@ -50,7 +57,6 @@ public class DCTBlocks {
 	}
 	
 	public float[][] reconstructComponent() {
-		
 		
 		float[][] result = new float[hBlockCount * BLOCK_SIZE][vBlockCount * BLOCK_SIZE];
 		

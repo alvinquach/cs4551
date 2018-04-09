@@ -8,6 +8,7 @@ import cs4551.homework3.models.image.rgb.ClonableImage;
 import cs4551.homework3.models.image.rgb.Image;
 import cs4551.homework3.models.image.ycbcr.ChromaSubsampling;
 import cs4551.homework3.models.image.ycbcr.YCbCrImage;
+import cs4551.homework3.models.image.ycbcr.YCbCrQuantized;
 import cs4551.homework3.models.image.ycbcr.YCbCrDCT;
 import cs4551.homework3.utils.ImageUtils;
 import cs4551.homework3.utils.PrintUtils;
@@ -59,15 +60,31 @@ public class CS4551_Quach {
 				start = System.nanoTime();
 			}
 
+			// Step E4. Quantization
+			// TODO Add user input for compression level.
+			YCbCrQuantized quantizedImage = new YCbCrQuantized(dctImage, 3);
+			if (runTimeDebug) {
+				System.out.println("E4 finished in " + runTimeAsString(start));
+				start = System.nanoTime();
+			}
+
+			// Step D2. De-quantization
+			// TODO Replace width and height params with values from file header.
+			YCbCrDCT dequantizedImage = quantizedImage.dequantize(resizedImage.getW(), resizedImage.getH());
+			if (runTimeDebug) {
+				System.out.println("D2 finished in " + runTimeAsString(start));
+				start = System.nanoTime();
+			}
+
 			// Step D3. IDCT
-			YCbCrImage reconstructedYCbCrImage = dctImage.reconstructYCbCrImage();
+			YCbCrImage reconstructedYCbCrImage = dequantizedImage.reconstructYCbCrImage();
 			if (runTimeDebug) {
 				System.out.println("D3 finished in " + runTimeAsString(start));
 				start = System.nanoTime();
 			}
 
 			// Step D4. Inverse color conversion and subsampling
-			Image rgbImage = yCbCrImage.toRGBImage();
+			Image rgbImage = reconstructedYCbCrImage.toRGBImage();
 			if (runTimeDebug) {
 				System.out.println("D4 finished in " + runTimeAsString(start));
 				start = System.nanoTime();
