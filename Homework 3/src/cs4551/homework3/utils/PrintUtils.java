@@ -15,5 +15,9 @@ public class PrintUtils {
 		}
 		System.out.println();
 	}
+	
+	public static void printValues(String... strings) {
+		System.out.println(String.join(", ", strings));
+	}
 
 }

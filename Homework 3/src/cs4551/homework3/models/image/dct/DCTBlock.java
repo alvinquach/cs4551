@@ -28,7 +28,7 @@ public class DCTBlock {
 				for (int i = 0; i < BLOCK_SIZE; i++) {
 					float cos = (float)Math.cos((2 * i + 1) * u * Math.PI / (2 * BLOCK_SIZE));
 					for (int j = 0; j < BLOCK_SIZE; j++) {
-						sum +=  cos * Math.cos((2 * j + 1) * v * Math.PI / (2 * BLOCK_SIZE)) * input[i][j];
+						sum += cos * Math.cos((2 * j + 1) * v * Math.PI / (2 * BLOCK_SIZE)) * input[i][j];
 					}
 				}
 				float value = c * sum; // Raw DCT value.

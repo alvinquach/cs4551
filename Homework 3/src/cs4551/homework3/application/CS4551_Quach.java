@@ -16,8 +16,10 @@ import cs4551.homework3.utils.PrintUtils;
  * @author Alvin Quach
  */
 public class CS4551_Quach {
-	
+
 	private static boolean displayIntermediateSteps = true;
+
+	private static boolean runTimeDebug = true;
 
 	private static Image sourceImage;
 
@@ -31,37 +33,52 @@ public class CS4551_Quach {
 		}
 
 		try {
-			
+
 			filename = Paths.get(args[0]).getFileName().toString().split("\\.")[0];
-			
+
 			// Read image
 			sourceImage = new ClonableImage(args[0]);
-			
+
 			// Step E1. Resize the input
 			Image resizedImage = ImageUtils.padImage(sourceImage, 8);
 			if (displayIntermediateSteps) resizedImage.display("Step E1 Result");
-			
+
+			Long start = System.nanoTime();
+
 			// Step E2. Color conversion and subsampling
-			YCbCrImage yCbCrImage = new YCbCrImage(resizedImage, ChromaSubsampling.YCRCB_444);
-			System.out.println("E2 DONE");
-			
+			YCbCrImage yCbCrImage = new YCbCrImage(resizedImage, ChromaSubsampling.YCRCB_420);
+			if (runTimeDebug) {
+				System.out.println("E2 FINISHED IN " + runTimeAsString(start));
+				start = System.nanoTime();
+			}
+
 			// Step E3. DCT
 			YCbCrImageDCT dctImage = new YCbCrImageDCT(yCbCrImage);
-			System.out.println("E3 DONE");
-			
+			if (runTimeDebug) {
+				System.out.println("E3 FINISHED IN " + runTimeAsString(start));
+				start = System.nanoTime();
+			}
+
 			// Step D3. IDCT
 			YCbCrImage reconstructedYCbCrImage = dctImage.reconstructYCbCrImage();
-			System.out.println("D3 DONE");
-			
+			if (runTimeDebug) {
+				System.out.println("D3 FINISHED IN " + runTimeAsString(start));
+				start = System.nanoTime();
+			}
+
 			// Step D4. Inverse color conversion and subsampling
-			Image rgbImage = reconstructedYCbCrImage.toRGBImage();
+			Image rgbImage = yCbCrImage.toRGBImage();
+			if (runTimeDebug) {
+				System.out.println("D4 FINISHED IN " + runTimeAsString(start));
+				start = System.nanoTime();
+			}
 			if (displayIntermediateSteps) rgbImage.display("Step D4 Result");
-			
+
 			// Step D5. Restore the original size
 			Image decompressedImage = ImageUtils.cropImage(rgbImage, 0, 0, sourceImage.getW(), sourceImage.getH());
 			decompressedImage.display("Step D5 Result");
-			
-			
+
+
 		}
 		catch (FileNotFoundException e) {
 			System.err.println("File " + args[0] + "not found.");
@@ -76,6 +93,10 @@ public class CS4551_Quach {
 			System.exit(1);
 		}
 
+	}
+
+	private static String runTimeAsString(Long start) {
+		return ((System.nanoTime() - start) / 1000000f) + " ms";
 	}
 
 }

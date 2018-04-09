@@ -45,8 +45,8 @@ public class YCbCrImageDCT {
 		float[][] cb = this.cb.reconstructComponent();
 		float[][] cr = this.cr.reconstructComponent();
 		for (int i = 0; i < cb.length; i++) {
-			System.arraycopy(cb[i], 0, result.getCb()[i], 0, cb[i].length);
-			System.arraycopy(cr[i], 0, result.getCr()[i], 0, cr[i].length);
+			System.arraycopy(cb[i], 0, result.getCb()[i], 0, result.getCb()[i].length);
+			System.arraycopy(cr[i], 0, result.getCr()[i], 0, result.getCr()[i].length);
 		}
 
 		return result;

@@ -11,13 +11,12 @@ public class DCTBlocks {
 	private int vBlockCount;
 	
 	public DCTBlocks(float[][] component) throws Exception {
+			
+		hBlockCount = (int)Math.ceil(component.length / (double)BLOCK_SIZE);
+		vBlockCount = (int)Math.ceil(component[0].length / (double)BLOCK_SIZE);
 		
-		if (component.length % BLOCK_SIZE > 0 || component[0].length % BLOCK_SIZE > 0) {
-			throw new Exception("Image component dimensions must be multiples of " + BLOCK_SIZE + "!");
-		}
-		
-		hBlockCount = component.length / BLOCK_SIZE;
-		vBlockCount = component[0].length / BLOCK_SIZE;
+		int width = component.length;
+		int height = component[0].length;
 		
 		dctBlocks = new DCTBlock[hBlockCount * vBlockCount];
 		
@@ -27,11 +26,19 @@ public class DCTBlocks {
 		// Break image component into blocks.
 		// Blocks are scanned in raster order - left to right, to to bottom.
 		int blockIndex = 0;
-		for (int y = 0; y < vBlockCount; y++) {
-			for (int x = 0; x < hBlockCount; x++) {
+		for (int y = 0; y < height; y += BLOCK_SIZE) {
+			for (int x = 0; x < width; x += BLOCK_SIZE) {
 				for (int _x = 0; _x < BLOCK_SIZE; _x++) {
 					for (int _y = 0; _y < BLOCK_SIZE; _y++) {
-						subsample[_x][_y] = component[_x + x * BLOCK_SIZE][_y + y * BLOCK_SIZE];
+						try {
+							subsample[_x][_y] = component[_x + x][_y + y];
+						}
+						catch (ArrayIndexOutOfBoundsException e) {
+	
+							// Use zero if out of bounds.
+							// This gives the same effect as padding with zeros.
+							subsample[_x][_y] = 0;
+						}
 					}
 				}
 				dctBlocks[blockIndex++] = new DCTBlock(subsample);

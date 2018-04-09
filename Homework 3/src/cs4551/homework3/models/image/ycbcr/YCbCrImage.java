@@ -36,7 +36,7 @@ public class YCbCrImage {
 
 		luma = new float[width][height];
 
-		int chromaWidth = subsampling.getH() * width / 4 ;
+		int chromaWidth =  subsampling.getH() * width / 4 ;
 		int chromaHeight = subsampling.getV() == 0 ? height / 2 : height;
 
 		cb = new float[chromaWidth][chromaHeight];
@@ -93,7 +93,7 @@ public class YCbCrImage {
 				else {
 					for (int _x = 0; _x < chromaWidthRatio; _x++) {
 						for (int _y = 0; _y < chromaHeightRatio; _y++) {
-							float[] yCbCr = temp[_x + x][_y + y];
+							float[] yCbCr = temp[_x + x * chromaWidthRatio][_y + y * chromaHeightRatio];
 							cb += yCbCr[1];
 							cr += yCbCr[2];
 						}
@@ -157,12 +157,19 @@ public class YCbCrImage {
 				int chromaY = y / chromaHeightRatio;
 
 				// Add 128 to luma, supersample and add 0.5 to chroma.
-				float[] yCbCr = new float[] {luma[x][y] + 128, cb[chromaX][chromaY] + 0.5f, cr[chromaX][chromaY] + 0.5f};
+				float[] yCbCr = {luma[x][y] + 128, cb[chromaX][chromaY] + 0.5f, cr[chromaX][chromaY] + 0.5f};
 
 				// Convert values to RGB.
-				float[] rgb = MathUtils.multiplyMatrix(YCBCR_TO_RGB, yCbCr);
+				float[] rgbFloats = MathUtils.multiplyMatrix(YCBCR_TO_RGB, yCbCr);
+				
+				// Round and clamp RGB components
+				int[] rgb = new int[3];
+				for (int i = 0; i < 3; i++) {
+					rgb[i] = MathUtils.clamp((int)Math.round(rgbFloats[i]), 0, 255);
+				}
 
-				result.setPixel(x, y, new int[] {(int)Math.round(rgb[0]), (int)Math.round(rgb[1]), (int)Math.round(rgb[2])});
+				// Set pixel value
+				result.setPixel(x, y, rgb);
 
 			}
 		}
