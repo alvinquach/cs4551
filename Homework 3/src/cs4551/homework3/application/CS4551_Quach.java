@@ -3,15 +3,17 @@ package cs4551.homework3.application;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
+import java.util.InputMismatchException;
+import java.util.Scanner;
 
+import cs4551.homework3.models.image.ImageConstants;
 import cs4551.homework3.models.image.rgb.ClonableImage;
 import cs4551.homework3.models.image.rgb.Image;
 import cs4551.homework3.models.image.ycbcr.ChromaSubsampling;
+import cs4551.homework3.models.image.ycbcr.YCbCrDCT;
 import cs4551.homework3.models.image.ycbcr.YCbCrImage;
 import cs4551.homework3.models.image.ycbcr.YCbCrQuantized;
-import cs4551.homework3.models.image.ycbcr.YCbCrDCT;
 import cs4551.homework3.utils.ImageUtils;
-import cs4551.homework3.utils.PrintUtils;
 
 /**
  * @author Alvin Quach
@@ -40,6 +42,26 @@ public class CS4551_Quach {
 			// Read image
 			sourceImage = new ClonableImage(args[0]);
 
+			// Ask user for compression level.
+			int n = 0;
+			Scanner sc = new Scanner(System.in);
+			System.out.println("\nPlease enter a compression level (0-" + ImageConstants.MAX_COMPRESSION_LEVEL + "): ");
+			while (true) {
+				try {
+					n = sc.nextInt();
+					if (n < 0 || n > ImageConstants.MAX_COMPRESSION_LEVEL) {
+						System.out.println("Invalid input.");
+						continue;
+					}
+					break;
+				}
+				catch (InputMismatchException e) {
+					System.out.println("Invalid input.");
+					sc.nextLine();
+				}
+			}
+			sc.close();
+
 			// Step E1. Resize the input
 			Image resizedImage = ImageUtils.padImage(sourceImage, 8);
 			if (displayIntermediateSteps) resizedImage.display("Step E1 Result");
@@ -61,8 +83,7 @@ public class CS4551_Quach {
 			}
 
 			// Step E4. Quantization
-			// TODO Add user input for compression level.
-			YCbCrQuantized quantizedImage = new YCbCrQuantized(dctImage, 3);
+			YCbCrQuantized quantizedImage = new YCbCrQuantized(dctImage, n);
 			if (runTimeDebug) {
 				System.out.println("E4 finished in " + runTimeAsString(start));
 				start = System.nanoTime();
