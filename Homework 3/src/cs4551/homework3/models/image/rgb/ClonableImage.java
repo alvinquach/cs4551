@@ -1,4 +1,4 @@
-package cs4551.homework3.models.image;
+package cs4551.homework3.models.image.rgb;
 
 import java.io.IOException;
 

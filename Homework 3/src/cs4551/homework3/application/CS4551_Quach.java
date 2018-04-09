@@ -4,11 +4,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Paths;
 
-import cs4551.homework3.models.image.ClonableImage;
-import cs4551.homework3.models.image.Image;
+import cs4551.homework3.models.image.rgb.ClonableImage;
+import cs4551.homework3.models.image.rgb.Image;
 import cs4551.homework3.models.image.ycbcr.ChromaSubsampling;
 import cs4551.homework3.models.image.ycbcr.YCbCrImage;
-import cs4551.homework3.models.image.ycbcr.YCbCrImageDCT;
+import cs4551.homework3.models.image.ycbcr.YCbCrDCT;
 import cs4551.homework3.utils.ImageUtils;
 import cs4551.homework3.utils.PrintUtils;
 
@@ -48,28 +48,28 @@ public class CS4551_Quach {
 			// Step E2. Color conversion and subsampling
 			YCbCrImage yCbCrImage = new YCbCrImage(resizedImage, ChromaSubsampling.YCRCB_420);
 			if (runTimeDebug) {
-				System.out.println("E2 FINISHED IN " + runTimeAsString(start));
+				System.out.println("E2 finished in " + runTimeAsString(start));
 				start = System.nanoTime();
 			}
 
 			// Step E3. DCT
-			YCbCrImageDCT dctImage = new YCbCrImageDCT(yCbCrImage);
+			YCbCrDCT dctImage = new YCbCrDCT(yCbCrImage);
 			if (runTimeDebug) {
-				System.out.println("E3 FINISHED IN " + runTimeAsString(start));
+				System.out.println("E3 finished in " + runTimeAsString(start));
 				start = System.nanoTime();
 			}
 
 			// Step D3. IDCT
 			YCbCrImage reconstructedYCbCrImage = dctImage.reconstructYCbCrImage();
 			if (runTimeDebug) {
-				System.out.println("D3 FINISHED IN " + runTimeAsString(start));
+				System.out.println("D3 finished in " + runTimeAsString(start));
 				start = System.nanoTime();
 			}
 
 			// Step D4. Inverse color conversion and subsampling
 			Image rgbImage = yCbCrImage.toRGBImage();
 			if (runTimeDebug) {
-				System.out.println("D4 FINISHED IN " + runTimeAsString(start));
+				System.out.println("D4 finished in " + runTimeAsString(start));
 				start = System.nanoTime();
 			}
 			if (displayIntermediateSteps) rgbImage.display("Step D4 Result");

@@ -1,8 +1,10 @@
 package cs4551.homework3.models.image.dct;
 
+import cs4551.homework3.models.image.ImageConstants;
+
 public class DCTBlocks {
 	
-	public static final int BLOCK_SIZE = DCTBlock.BLOCK_SIZE;
+	public static final int BLOCK_SIZE = ImageConstants.JPEG_BLOCK_SIZE;
 	
 	private DCTBlock[] dctBlocks;
 	

@@ -1,11 +1,12 @@
 package cs4551.homework3.models.image.dct;
 
+import cs4551.homework3.models.image.ImageConstants;
 import cs4551.homework3.utils.MathUtils;
 
 /** 8x8 DCT block */
 public class DCTBlock {
 	
-	public static final int BLOCK_SIZE = 8;
+	public static final int BLOCK_SIZE = ImageConstants.JPEG_BLOCK_SIZE;
 	
 	private static final float DCT_MIN_VALUE = -(float)Math.pow(2, 10);
 	private static final float DCT_MAX_VALUE =  (float)Math.pow(2, 10);

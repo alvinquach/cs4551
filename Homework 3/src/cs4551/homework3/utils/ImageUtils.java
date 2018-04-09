@@ -1,7 +1,7 @@
 package cs4551.homework3.utils;
 
-import cs4551.homework3.models.image.ClonableImage;
-import cs4551.homework3.models.image.Image;
+import cs4551.homework3.models.image.rgb.ClonableImage;
+import cs4551.homework3.models.image.rgb.Image;
 
 /**
  * @author Alvin Quach

@@ -3,7 +3,7 @@ package cs4551.homework3.models.image.ycbcr;
 import cs4551.homework3.models.image.dct.DCTBlocks;
 
 /** Contains DCT values of Y, Cb, and Cr components. */
-public class YCbCrImageDCT {
+public class YCbCrDCT {
 	
 	private DCTBlocks luma;
 	
@@ -13,7 +13,7 @@ public class YCbCrImageDCT {
 	
 	private ChromaSubsampling subsampling;
 	
-	public YCbCrImageDCT(YCbCrImage image) throws Exception {
+	public YCbCrDCT(YCbCrImage image) throws Exception {
 		luma = new DCTBlocks(image.getLuma());
 		cb = new DCTBlocks(image.getCb());
 		cr = new DCTBlocks(image.getCr());
