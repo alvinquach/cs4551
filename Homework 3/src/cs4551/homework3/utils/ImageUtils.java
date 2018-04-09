@@ -16,9 +16,12 @@ public class ImageUtils {
 	 * @return A new {@code Image} instance with padded pixels.
 	 */
 	public static Image padImage(Image source, int multiple) {
+		
+		int width = source.getW();
+		int height = source.getH();
 
-		int paddedWidth = source.getW() + (source.getW() % multiple > 0 ? multiple : 0);
-		int paddedHeight = source.getH() + (source.getH() % multiple > 0 ? multiple : 0);
+		int paddedWidth = width % multiple > 0 ? width / multiple * multiple + multiple : width;
+		int paddedHeight = height % multiple > 0 ? height / multiple * multiple + multiple : height;
 
 		Image result = new ClonableImage(paddedWidth, paddedHeight);
 

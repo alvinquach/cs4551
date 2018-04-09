@@ -48,8 +48,8 @@ public class YCbCrImage {
 
 		this(image.getW(), image.getH(), subsampling);
 
-		int width = getW();
-		int height = getH();
+		int width = luma.length;
+		int height = luma[0].length;
 
 		// Temporary arrays for storing YCbCr and RGB values.
 		float[][][] temp = new float[width][height][3];
@@ -69,8 +69,8 @@ public class YCbCrImage {
 			}
 		}
 
-		int chromaWidth = getChromaW();
-		int chromaHeight = getChromaH();
+		int chromaWidth = cb.length;
+		int chromaHeight = cb[0].length;
 		int chromaWidthRatio = width / chromaWidth;
 		int chromaHeightRatio = height / chromaHeight;
 		int subsamples = chromaWidthRatio * chromaHeightRatio;
@@ -121,38 +121,16 @@ public class YCbCrImage {
 		return subsampling;
 	}
 
-	public int getW() {
-		return luma.length;
+	public float[][] getLuma() {
+		return luma;
+	}
+	
+	public float[][] getCb() {
+		return cb;
 	}
 
-	public int getH() {
-		return luma[0].length;
-	}
-
-	public int getChromaW() {
-		return cb.length;
-	}
-
-	public int getChromaH() {
-		return cb[0].length;
-	}
-
-	public float getLumaValue(int x, int y) {
-		x = MathUtils.clamp(x, 0, getW() - 1);
-		y = MathUtils.clamp(y, 0, getH() - 1);
-		return luma[x][y];
-	}
-
-	public float getCbValue(int x, int y) {
-		x = MathUtils.clamp(x, 0, getChromaW() - 1);
-		y = MathUtils.clamp(y, 0, getChromaH() - 1);
-		return cb[x][y];
-	}
-
-	public float getCrValue(int x, int y) {
-		x = MathUtils.clamp(x, 0, getChromaW() - 1);
-		y = MathUtils.clamp(y, 0, getChromaH() - 1);
-		return cr[x][y];
+	public float[][] getCr() {
+		return cr;
 	}
 
 	/**
@@ -162,13 +140,13 @@ public class YCbCrImage {
 	 */
 	public Image toRGBImage() throws Exception {
 
-		int width = getW();
-		int height = getH();
+		int width = luma.length;
+		int height = luma[0].length;
 
 		Image result = new ClonableImage(width, height);
 
-		int chromaWidth = getChromaW();
-		int chromaHeight = getChromaH();
+		int chromaWidth = cb.length;
+		int chromaHeight = cb[0].length;
 		int chromaWidthRatio = width / chromaWidth;
 		int chromaHeightRatio = height / chromaHeight;
 
