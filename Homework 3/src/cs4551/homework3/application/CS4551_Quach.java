@@ -136,11 +136,11 @@ public class CS4551_Quach {
 			
 			// Step D4. Inverse color conversion and subsampling
 			Image rgbImage = reconstructedYCbCrImage.toRGBImage();
+			if (displayIntermediateSteps) rgbImage.display("Step D4 Result");
 			if (runTimeDebug) {
 				System.out.println("D4 finished in " + runTimeAsString(start));
 				start = System.nanoTime();
 			}
-			if (displayIntermediateSteps) rgbImage.display("Step D4 Result");
 
 			
 			// Step D5. Restore the original size
