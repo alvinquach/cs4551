@@ -110,7 +110,7 @@ public class CS4551_Quach {
 			int lumaSize = EncodeUtils.calculateImageEncodedSize(lumaRunLengthPairs, 10 - n, 6);
 			int cbSize = EncodeUtils.calculateImageEncodedSize(cbRunLengthPairs, 9 - n, 6);
 			int crSize = EncodeUtils.calculateImageEncodedSize(crRunLengthPairs, 9 - n, 6);
-			PrintUtils.printCompressionRatio(n, sourceImage.getW(), sourceImage.getH(), lumaSize, cbSize, crSize);
+			PrintUtils.printCompressionRatio(n, sourceImage.getW(), sourceImage.getH(), lumaSize, cbSize, crSize); // Print to console.
 			if (runTimeDebug) {
 				System.out.println("E5 finished in " + runTimeAsString(start));
 				start = System.nanoTime();
