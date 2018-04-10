@@ -111,6 +111,10 @@ public class CS4551_Quach {
 			int cbSize = EncodeUtils.calculateImageEncodedSize(cbRunLengthPairs, 9 - n, 6);
 			int crSize = EncodeUtils.calculateImageEncodedSize(crRunLengthPairs, 9 - n, 6);
 			PrintUtils.printCompressionRatio(n, sourceImage.getW(), sourceImage.getH(), lumaSize, cbSize, crSize);
+			if (runTimeDebug) {
+				System.out.println("E5 finished in " + runTimeAsString(start));
+				start = System.nanoTime();
+			}
 			
 			
 			// Step D2. De-quantization
