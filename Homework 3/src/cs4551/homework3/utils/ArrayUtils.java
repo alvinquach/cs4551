@@ -9,15 +9,15 @@ public class ArrayUtils {
 	}
 	
 	
-	/** Enumerate array in zig-zag order. */
-	public static float[] enumerateArray(float[][] arr) {
+	/** Enumerate an integer array in zig-zag order. */
+	public static int[] enumerateArray(int[][] arr) {
 		
 		// TODO Check if any dimension of the input array is 0;
 		
 		int width = arr.length;
 		int height = arr[0].length;
 		
-		float[] result = new float[width * height];
+		int[] result = new int[width * height];
 		
 		ZigZagEnumerationState state = new ZigZagEnumerationState();
 		do {
@@ -30,13 +30,13 @@ public class ArrayUtils {
 
 	
 	/** Rebuilds a 2D array from a 1D array that was enumerated in zig-zag order. */
-	public static float[][] rebuildArray(float[] values, int width, int height) throws Exception {
+	public static int[][] rebuildArray(int[] values, int width, int height) throws Exception {
 		
 		if (values.length < width * height) {
 			throw new Exception("Not enough values to rebuild array!");
 		}
 		
-		float[][] result = new float[width][height];
+		int[][] result = new int[width][height];
 		
 		ZigZagEnumerationState state = new ZigZagEnumerationState();
 		do {
@@ -51,7 +51,7 @@ public class ArrayUtils {
 	/** Helper method for navigation through an array in zig-zag pattern. */
 	private static boolean navigateZigZag(ZigZagEnumerationState state, int width, int height) {
 		
-		System.out.println(state.x + ", " + state.y);
+//		System.out.println(state.x + ", " + state.y);
 		
 		// Reached the end
 		if (state.x == width - 1 && state.y == height - 1) {
