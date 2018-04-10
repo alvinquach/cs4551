@@ -13,6 +13,14 @@ public class MathUtils {
 		return value < min ? min : value > max ? max : value;
 	}
 
+	/**
+	 * Multiplies a matrix by a vector. 
+	 * Note that the matrix should be arranged in a[row][column] instead of a[x][y].
+	 * @param a Matrix
+	 * @param b Vector
+	 * @return A vector representing the product of a and b
+	 * @throws Exception
+	 */
 	public static float[] multiplyMatrix(float[][] a, float[] b) throws Exception {
 
 		if (a[0].length != b.length) {
