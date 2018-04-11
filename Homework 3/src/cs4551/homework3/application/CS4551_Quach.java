@@ -7,7 +7,8 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
-import cs4551.homework3.models.encode.RunLengthPair;
+import cs4551.homework3.models.encode.rle.RunLengthEncode;
+import cs4551.homework3.models.encode.rle.RunLengthPair;
 import cs4551.homework3.models.image.ImageConstants;
 import cs4551.homework3.models.image.rgb.ClonableImage;
 import cs4551.homework3.models.image.rgb.Image;
@@ -15,7 +16,6 @@ import cs4551.homework3.models.image.ycbcr.ChromaSubsampling;
 import cs4551.homework3.models.image.ycbcr.YCbCrDCT;
 import cs4551.homework3.models.image.ycbcr.YCbCrImage;
 import cs4551.homework3.models.image.ycbcr.YCbCrQuantized;
-import cs4551.homework3.utils.EncodeUtils;
 import cs4551.homework3.utils.ImageUtils;
 import cs4551.homework3.utils.PrintUtils;
 
@@ -104,12 +104,12 @@ public class CS4551_Quach {
 			
 			
 			// Step E5. Intermediate representation
-			List<RunLengthPair> lumaRunLengthPairs = EncodeUtils.generateRunLengthPairsFromQuantizedBlocks(quantizedImage.getQuantizedLumaBlocks());
-			List<RunLengthPair> cbRunLengthPairs = EncodeUtils.generateRunLengthPairsFromQuantizedBlocks(quantizedImage.getQuantizedCbBlocks());
-			List<RunLengthPair> crRunLengthPairs = EncodeUtils.generateRunLengthPairsFromQuantizedBlocks(quantizedImage.getQuantizedCrBlocks());
-			int lumaSize = EncodeUtils.calculateImageEncodedSize(lumaRunLengthPairs, 10 - n, 6);
-			int cbSize = EncodeUtils.calculateImageEncodedSize(cbRunLengthPairs, 9 - n, 6);
-			int crSize = EncodeUtils.calculateImageEncodedSize(crRunLengthPairs, 9 - n, 6);
+			List<RunLengthPair> lumaRunLengthPairs = RunLengthEncode.generateRunLengthPairsFromQuantizedBlocks(quantizedImage.getQuantizedLumaBlocks());
+			List<RunLengthPair> cbRunLengthPairs = RunLengthEncode.generateRunLengthPairsFromQuantizedBlocks(quantizedImage.getQuantizedCbBlocks());
+			List<RunLengthPair> crRunLengthPairs = RunLengthEncode.generateRunLengthPairsFromQuantizedBlocks(quantizedImage.getQuantizedCrBlocks());
+			int lumaSize = RunLengthEncode.calculateImageEncodedSize(lumaRunLengthPairs, 10 - n, 6);
+			int cbSize = RunLengthEncode.calculateImageEncodedSize(cbRunLengthPairs, 9 - n, 6);
+			int crSize = RunLengthEncode.calculateImageEncodedSize(crRunLengthPairs, 9 - n, 6);
 			PrintUtils.printCompressionRatio(n, sourceImage.getW(), sourceImage.getH(), lumaSize, cbSize, crSize); // Print to console.
 			if (runTimeDebug) {
 				System.out.println("E5 finished in " + runTimeAsString(start));

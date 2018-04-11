@@ -1,9 +1,9 @@
-package cs4551.homework3.models.encode;
+package cs4551.homework3.models.encode.rle;
 
 public class RunLengthPair {
-	
+
 	private int code;
-	
+
 	private int length;
 
 	public RunLengthPair(int code, int length) {
@@ -19,7 +19,7 @@ public class RunLengthPair {
 	public int getLength() {
 		return length;
 	}
-	
+
 	public int calculateSize(int codeSizeLimit, int lengthSizeLimit) {
 		return codeSizeLimit + (length == 0 ? 0 : lengthSizeLimit);
 	}
