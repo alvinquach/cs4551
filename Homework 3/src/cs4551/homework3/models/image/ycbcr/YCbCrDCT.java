@@ -8,6 +8,10 @@ import cs4551.homework3.utils.ImageUtils;
 /** Contains DCT values of Y, Cb, and Cr components. */
 public class YCbCrDCT {
 	
+	private int width;
+	
+	private int height;
+	
 	private DCTBlocks luma;
 	
 	private DCTBlocks cb;
@@ -17,6 +21,8 @@ public class YCbCrDCT {
 	private ChromaSubsampling subsampling;
 	
 	public YCbCrDCT(YCbCrImage image) throws Exception {
+		width = image.getLuma().length;
+		height = image.getLuma()[0].length;
 		luma = new DCTBlocks(image.getLuma());
 		cb = new DCTBlocks(image.getCb());
 		cr = new DCTBlocks(image.getCr());
@@ -26,6 +32,8 @@ public class YCbCrDCT {
 	protected YCbCrDCT(DCTBlock[] luma, DCTBlock[] cb, DCTBlock[] cr, ChromaSubsampling subsampling, int width, int height) {
 		
 		// TODO Add error checking.
+		this.width = width;
+		this.height = height;
 		
 		int lumaHBlockCount = width / ImageConstants.JPEG_BLOCK_SIZE;
 		int lumaVBlockCount = height / ImageConstants.JPEG_BLOCK_SIZE;
@@ -37,6 +45,14 @@ public class YCbCrDCT {
 		this.cr = new DCTBlocks(cr, chromaHBlockCount, chromaVBlockCount);
 		this.subsampling = subsampling;
 		
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
 	}
 
 	public DCTBlocks getLuma() {

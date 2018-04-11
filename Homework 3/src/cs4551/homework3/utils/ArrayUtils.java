@@ -46,6 +46,25 @@ public class ArrayUtils {
 		
 		return result;
 	}
+	
+	
+	/** Converts a Boolean array to a boolean array. */
+	public static boolean[] convertBooleanArray(Boolean[] bits) {
+		boolean[] _bits = new boolean[bits.length];
+		for (int i = 0; i < bits.length; i++) {
+			_bits[i] = bits[i];
+		}
+		return _bits;
+	}
+	
+	/** Converts a boolean array to a Boolean array. */
+	public static Boolean[] convertBooleanArray(boolean[] bits) {
+		Boolean[] _bits = new Boolean[bits.length];
+		for (int i = 0; i < bits.length; i++) {
+			_bits[i] = bits[i];
+		}
+		return _bits;
+	}
 
 
 	/** Helper method for navigation through an array in zig-zag pattern. */
@@ -90,4 +109,6 @@ public class ArrayUtils {
 		
 		return false;
 	}
+	
+
 }

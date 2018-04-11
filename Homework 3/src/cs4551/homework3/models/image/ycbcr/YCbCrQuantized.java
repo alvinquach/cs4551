@@ -8,6 +8,7 @@ import cs4551.homework3.models.image.ImageConstants;
 import cs4551.homework3.models.image.dct.DCTBlock;
 import cs4551.homework3.models.image.quantized.QuantizationTable;
 import cs4551.homework3.models.image.quantized.QuantizedBlock;
+import cs4551.homework3.utils.FileUtils;
 import cs4551.homework3.utils.ImageUtils;
 
 public class YCbCrQuantized {
@@ -21,12 +22,18 @@ public class YCbCrQuantized {
 	private int compressionLevel;
 
 	private ChromaSubsampling subsampling;
+	
+	private int width;
+	
+	private int height;
 
 	/** Quantizes a Y`CbCr image. */
 	public YCbCrQuantized(YCbCrDCT yCbCrDCTImage, int n) throws Exception {
 
 		compressionLevel = n;
 		subsampling = yCbCrDCTImage.getSubsampling();
+		width = yCbCrDCTImage.getWidth();
+		height = yCbCrDCTImage.getHeight();
 
 		// Quantize luma
 		DCTBlock[] lumaBlocks = yCbCrDCTImage.getLuma().getDctBlocks();
@@ -51,26 +58,32 @@ public class YCbCrQuantized {
 
 	}
 
-	/** Reconstructs quantized Y'CbCr data from a bit array. */
-	public YCbCrQuantized(boolean[] bits, int n, ChromaSubsampling subsampling, int width, int height) throws Exception {
+	/** Reconstructs quantized Y'CbCr data from a bit array. Bit array should include image metadata header. */
+	public YCbCrQuantized(boolean[] bits) throws Exception {
 
-		compressionLevel = n;
-		this.subsampling = subsampling;
+		// Parse metadata header
+		int[] metadata = FileUtils.decodeMetadata(Arrays.copyOf(bits, 128));
+		width = metadata[0];
+		height = metadata[1];
+		subsampling = ChromaSubsampling.values()[metadata[2]];
+		int n = compressionLevel = metadata[3];
 
 		int blockSize = ImageConstants.JPEG_BLOCK_SIZE;
-		width = width % blockSize > 0 ? width / blockSize * blockSize + blockSize : width;
-		height = height % blockSize > 0 ? height / blockSize * blockSize + blockSize : height;
 
-		int lumaBlockCount = width * height / (blockSize * blockSize);
-		int chromaHBlockCount = (int)Math.ceil(ImageUtils.getChromaWidth(width, subsampling) / (double)ImageConstants.JPEG_BLOCK_SIZE);
-		int chromaVBlockCount = (int)Math.ceil(ImageUtils.getChromaHeight(height, subsampling) / (double)ImageConstants.JPEG_BLOCK_SIZE);
+		// Pad dimensions to multiple of 8.
+		int paddedWidth = width % blockSize > 0 ? width / blockSize * blockSize + blockSize : width;
+		int paddedHeight = height % blockSize > 0 ? height / blockSize * blockSize + blockSize : height;
+
+		int lumaBlockCount = paddedWidth * paddedHeight / (blockSize * blockSize);
+		int chromaHBlockCount = (int)Math.ceil(ImageUtils.getChromaWidth(paddedWidth, subsampling) / (double)ImageConstants.JPEG_BLOCK_SIZE);
+		int chromaVBlockCount = (int)Math.ceil(ImageUtils.getChromaHeight(paddedHeight, subsampling) / (double)ImageConstants.JPEG_BLOCK_SIZE);
 		int chromaBlockCount = chromaHBlockCount * chromaVBlockCount;
 
 		int lumaCodeSizeLimit = 10 - n;
 		int chromaCodeSizeLimit = 9 - n;
 		int lengthSizeLimit = 6;
 
-		int bitIndex = 0;
+		int bitIndex = 128; // Skip metadata
 		boolean newBlock = true;
 
 		// Reconstruct Y'
@@ -126,6 +139,14 @@ public class YCbCrQuantized {
 
 	}
 
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
 	public QuantizedBlock[] getQuantizedLumaBlocks() {
 		return quantizedLumaBlocks;
 	}
@@ -155,7 +176,7 @@ public class YCbCrQuantized {
 	 * @param height Height of the image or luma component.
 	 * @return DCT representation of the Y'CbCr values.
 	 */
-	public YCbCrDCT dequantize(int width, int height) {
+	public YCbCrDCT dequantize() {
 
 		// De-quantize luma
 		DCTBlock[] lumaBlocks = new DCTBlock[quantizedLumaBlocks.length];
@@ -187,7 +208,12 @@ public class YCbCrQuantized {
 			}
 		}
 
-		return new YCbCrDCT(lumaBlocks, cbBlocks, crBlocks, subsampling, width, height);
+		// Pad dimensions to multiple of 8.
+		int blockSize = ImageConstants.JPEG_BLOCK_SIZE;
+		int paddedWidth = width % blockSize > 0 ? width / blockSize * blockSize + blockSize : width;
+		int paddedHeight = height % blockSize > 0 ? height / blockSize * blockSize + blockSize : height;
+		
+		return new YCbCrDCT(lumaBlocks, cbBlocks, crBlocks, subsampling, paddedWidth, paddedHeight);
 
 	}
 
