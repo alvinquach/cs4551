@@ -98,22 +98,22 @@ public class CS4551_Quach {
 
 
 			// Step EC. Bit packing
-			List<Boolean[]> dataBitsSet = new ArrayList<>();
-			dataBitsSet.add(lumaRunLengthEncoded.toBitStream(10 - n, 6));
-			dataBitsSet.add(cbRunLengthEncoded.toBitStream(9 - n, 6));
-			dataBitsSet.add(crRunLengthEncoded.toBitStream(9 - n, 6));
-			byte[] dataBytes = FileUtils.bitsToBytes(dataBitsSet.stream().flatMap(b -> Arrays.stream(b)).toArray(Boolean[]::new));
+			List<Boolean[]> bits = new ArrayList<>();
+			bits.add(FileUtils.encodeMetadata(sourceImage, yCbCrImage.getSubsampling(), n));
+			bits.add(lumaRunLengthEncoded.toBitStream(10 - n, 6));
+			bits.add(cbRunLengthEncoded.toBitStream(9 - n, 6));
+			bits.add(crRunLengthEncoded.toBitStream(9 - n, 6));
+			byte[] dataBytes = FileUtils.bitsToBytes(bits.stream().flatMap(b -> Arrays.stream(b)).toArray(Boolean[]::new));
 			FileUtils.writeBinaryFile(dataBytes, outputFilePath, false);
 
 
 			// Step D1. Bit unpacking
-			// TODO Replace width and height params with values from file header.
 			boolean[] fileBits = FileUtils.bytesToBits(FileUtils.readFileAsBytes(outputFilePath));
-			YCbCrQuantized unpackedQuantizedImage = new YCbCrQuantized(fileBits, n, ChromaSubsampling.YCRCB_420, sourceImage.getW(), sourceImage.getH());
+			YCbCrQuantized unpackedQuantizedImage = new YCbCrQuantized(fileBits);
 
 
 			// Step D2. De-quantization
-			YCbCrDCT dequantizedImage = unpackedQuantizedImage.dequantize(resizedImage.getW(), resizedImage.getH());
+			YCbCrDCT dequantizedImage = unpackedQuantizedImage.dequantize();
 
 
 			// Step D3. IDCT
@@ -125,7 +125,7 @@ public class CS4551_Quach {
 
 
 			// Step D5. Restore the original size
-			Image decompressedImage = ImageUtils.cropImage(rgbImage, 0, 0, sourceImage.getW(), sourceImage.getH());
+			Image decompressedImage = ImageUtils.cropImage(rgbImage, 0, 0, unpackedQuantizedImage.getWidth(), unpackedQuantizedImage.getHeight());
 			decompressedImage.display("Step D5 Result");
 
 		}
