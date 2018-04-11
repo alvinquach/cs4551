@@ -27,10 +27,6 @@ import cs4551.homework3.utils.PrintUtils;
  */
 public class CS4551_Quach {
 
-	private static boolean displayIntermediateSteps = true;
-
-	private static boolean runTimeDebug = true;
-
 	private static Image sourceImage;
 
 	private static String filename;
@@ -74,40 +70,21 @@ public class CS4551_Quach {
 
 			sc.close();
 
-			Long start = System.nanoTime();
-
 
 			// Step E1. Resize the input
 			Image resizedImage = ImageUtils.padImage(sourceImage, ImageConstants.JPEG_BLOCK_SIZE);
-			if (displayIntermediateSteps) resizedImage.display("Step E1 Result");
-			if (runTimeDebug) {
-				System.out.println("E1 finished in " + runTimeAsString(start));
-				start = System.nanoTime();
-			}
 
 
 			// Step E2. Color conversion and subsampling
 			YCbCrImage yCbCrImage = new YCbCrImage(resizedImage, ChromaSubsampling.YCRCB_420);
-			if (runTimeDebug) {
-				System.out.println("E2 finished in " + runTimeAsString(start));
-				start = System.nanoTime();
-			}
 
 
 			// Step E3. DCT
 			YCbCrDCT dctImage = new YCbCrDCT(yCbCrImage);
-			if (runTimeDebug) {
-				System.out.println("E3 finished in " + runTimeAsString(start));
-				start = System.nanoTime();
-			}
 
 
 			// Step E4. Quantization
 			YCbCrQuantized quantizedImage = new YCbCrQuantized(dctImage, n);
-			if (runTimeDebug) {
-				System.out.println("E4 finished in " + runTimeAsString(start));
-				start = System.nanoTime();
-			}
 
 
 			// Step E5. Intermediate representation
@@ -118,10 +95,6 @@ public class CS4551_Quach {
 			int cbSize = RunLengthEncode.calculateImageEncodedSize(cbRunLengthEncoded, 9 - n, 6);
 			int crSize = RunLengthEncode.calculateImageEncodedSize(crRunLengthEncoded, 9 - n, 6);
 			PrintUtils.printCompressionRatio(n, sourceImage.getW(), sourceImage.getH(), lumaSize, cbSize, crSize); // Print to console.
-			if (runTimeDebug) {
-				System.out.println("E5 finished in " + runTimeAsString(start));
-				start = System.nanoTime();
-			}
 
 
 			// Step EC. Bit packing
@@ -131,54 +104,29 @@ public class CS4551_Quach {
 			dataBitsSet.add(crRunLengthEncoded.toBitStream(9 - n, 6));
 			byte[] dataBytes = FileUtils.bitsToBytes(dataBitsSet.stream().flatMap(b -> Arrays.stream(b)).toArray(Boolean[]::new));
 			FileUtils.writeBinaryFile(dataBytes, outputFilePath, false);
-			if (runTimeDebug) {
-				System.out.println("EC finished in " + runTimeAsString(start));
-				start = System.nanoTime();
-			}
 
 
 			// Step D1. Bit unpacking
 			// TODO Replace width and height params with values from file header.
 			boolean[] fileBits = FileUtils.bytesToBits(FileUtils.readFileAsBytes(outputFilePath));
 			YCbCrQuantized unpackedQuantizedImage = new YCbCrQuantized(fileBits, n, ChromaSubsampling.YCRCB_420, sourceImage.getW(), sourceImage.getH());
-			if (runTimeDebug) {
-				System.out.println("D1 finished in " + runTimeAsString(start));
-				start = System.nanoTime();
-			}
 
 
 			// Step D2. De-quantization
 			YCbCrDCT dequantizedImage = unpackedQuantizedImage.dequantize(resizedImage.getW(), resizedImage.getH());
-			if (runTimeDebug) {
-				System.out.println("D2 finished in " + runTimeAsString(start));
-				start = System.nanoTime();
-			}
 
 
 			// Step D3. IDCT
 			YCbCrImage reconstructedYCbCrImage = dequantizedImage.reconstructYCbCrImage();
-			if (runTimeDebug) {
-				System.out.println("D3 finished in " + runTimeAsString(start));
-				start = System.nanoTime();
-			}
 
 
 			// Step D4. Inverse color conversion and subsampling
 			Image rgbImage = reconstructedYCbCrImage.toRGBImage();
-			if (displayIntermediateSteps) rgbImage.display("Step D4 Result");
-			if (runTimeDebug) {
-				System.out.println("D4 finished in " + runTimeAsString(start));
-				start = System.nanoTime();
-			}
 
 
 			// Step D5. Restore the original size
 			Image decompressedImage = ImageUtils.cropImage(rgbImage, 0, 0, sourceImage.getW(), sourceImage.getH());
 			decompressedImage.display("Step D5 Result");
-			if (runTimeDebug) {
-				System.out.println("D5 finished in " + runTimeAsString(start));
-				start = System.nanoTime();
-			}
 
 		}
 		catch (FileNotFoundException e) {
@@ -196,8 +144,5 @@ public class CS4551_Quach {
 
 	}
 
-	private static String runTimeAsString(Long start) {
-		return ((System.nanoTime() - start) / 1000000f) + " ms";
-	}
 
 }
