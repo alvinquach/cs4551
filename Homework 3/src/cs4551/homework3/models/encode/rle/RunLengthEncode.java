@@ -58,7 +58,7 @@ public class RunLengthEncode {
 					System.exit(1);
 				}
 			}
-			if (valueIndex >= values.length - 1) {
+			if (valueIndex >= values.length) {
 				QuantizedBlock block = new QuantizedBlock(n, quantizationTable);
 				int[][] array = ArrayUtils.rebuildArray(values, blockSize, blockSize);
 				for (int j = 0; j < blockSize; j++) {
