@@ -132,6 +132,7 @@ public class CS4551_Quach {
 			bits.add(crRunLengthEncoded.toBitStream(9 - n, 6));
 			byte[] dataBytes = FileUtils.bitsToBytes(bits.stream().flatMap(b -> Arrays.stream(b)).toArray(Boolean[]::new));
 			FileUtils.writeBinaryFile(dataBytes, outputFilePath, false);
+			System.out.println("Compressed image data was written to " + outputFilePath.toAbsolutePath() + "\n");
 			if (runTimeDebug) {
 				System.out.println("EC finished in " + runTimeAsString(start));
 				start = System.nanoTime();
