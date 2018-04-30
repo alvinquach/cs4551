@@ -15,4 +15,19 @@ public class Coord {
 		this.y = y;
 	}
 	
+	@Override
+	public String toString() {
+		String x = String.valueOf(this.x);
+		String y = String.valueOf(this.y);
+		StringBuilder sb = new StringBuilder("[");
+		for (int i = 0; i < 3 - x.length(); i++) {
+			sb.append(" ");
+		}
+		sb.append(x).append(",");
+		for (int i = 0; i < 3 - y.length(); i++) {
+			sb.append(" ");
+		}
+		return sb.append(y).append("]").toString();
+	}
+	
 }

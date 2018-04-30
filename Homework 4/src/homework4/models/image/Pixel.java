@@ -1,15 +1,21 @@
 package homework4.models.image;
 
+import homework4.utils.MathUtils;
+
 public class Pixel {
 	
 	private int r;
 	private int g;
 	private int b;
 	
+	public Pixel(int intensity) {
+		setIntensity(intensity);
+	}
+	
 	public Pixel(int r, int g, int b) {
-		this.r = r;
-		this.g = g;
-		this.b = b;
+		setR(r);
+		setG(g);
+		setB(b);
 	}
 
 	public int getR() {
@@ -17,7 +23,7 @@ public class Pixel {
 	}
 
 	public void setR(int r) {
-		this.r = r;
+		this.r = MathUtils.clamp(r, 0, 255);
 	}
 
 	public int getG() {
@@ -25,7 +31,7 @@ public class Pixel {
 	}
 
 	public void setG(int g) {
-		this.g = g;
+		this.g = MathUtils.clamp(g, 0, 255);
 	}
 
 	public int getB() {
@@ -33,7 +39,14 @@ public class Pixel {
 	}
 
 	public void setB(int b) {
-		this.b = b;
+		this.b = MathUtils.clamp(b, 0, 255);
+	}
+	
+	public void setIntensity(int intensity) {
+		intensity = MathUtils.clamp(intensity, 0, 255);
+		r = intensity;
+		g = intensity;
+		b = intensity;
 	}
 	
 	public int[] toArray() {

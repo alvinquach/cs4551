@@ -12,7 +12,10 @@ import com.sun.imageio.plugins.common.ImageUtil;
 import homework4.application.MenuDisplay.Menu;
 import homework4.models.image.ClonableImage;
 import homework4.models.image.Image;
+import homework4.models.image.motion.BlockSearch;
 import homework4.models.image.motion.Macroblocks;
+import homework4.models.image.motion.ResidualBlock;
+import homework4.models.image.motion.ResidualBlocks;
 import homework4.utils.ImageUtils;
 import homework4.utils.ValidationUtils;
 
@@ -138,8 +141,15 @@ public class CS4551_Quach {
 
 						// Divide the target image into a set of nxn macro blocks
 						Macroblocks macroblocks = Macroblocks.fromImage(targetImage, n);
-						ImageUtils.blocksToImage(macroblocks.getBlocks(), targetImage.getW(), targetImage.getH()).display();
 						
+						// Calculate motion vectors and error blocks
+						ResidualBlocks residualBlocks = ResidualBlocks.fromComparison(macroblocks, referenceImage, p, BlockSearch.LINEAR);
+						
+						// Scale error values to range [0, 255]
+						residualBlocks.normalize();
+						
+						ImageUtils.blocksToImage(residualBlocks.getBlocks(), targetImage.getW(), targetImage.getH()).display();
+						System.out.println(residualBlocks);
 					}
 
 					// Removing Moving Objects
