@@ -19,4 +19,11 @@ public class ValidationUtils {
 		return false;
 	}
 	
+	public static boolean frameIsValid(int sequence) {
+		if (sequence >= 19 && sequence <= 179) {
+			return true;
+		}
+		return false;
+	}
+	
 }

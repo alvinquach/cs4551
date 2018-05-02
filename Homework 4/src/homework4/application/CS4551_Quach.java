@@ -7,14 +7,11 @@ import java.nio.file.Paths;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import com.sun.imageio.plugins.common.ImageUtil;
-
 import homework4.application.MenuDisplay.Menu;
 import homework4.models.image.ClonableImage;
 import homework4.models.image.Image;
 import homework4.models.image.motion.BlockSearch;
 import homework4.models.image.motion.Macroblocks;
-import homework4.models.image.motion.ResidualBlock;
 import homework4.models.image.motion.ResidualBlocks;
 import homework4.utils.FileUtils;
 import homework4.utils.ImageUtils;
@@ -105,7 +102,7 @@ public class CS4551_Quach {
 						}
 						
 						// Request n
-						menuDisplay.displayAliasingSubmenu('n', "macro block size (8, 16, or 24)");
+						menuDisplay.displayMacroBlockSubmenu('n', "macro block size (8, 16, or 24)");
 						while (true) {
 							try {
 								n = sc.nextInt();
@@ -123,7 +120,7 @@ public class CS4551_Quach {
 						}
 						
 						// Request p
-						menuDisplay.displayAliasingSubmenu('p', "search window (4, 8, 12, or 16)");
+						menuDisplay.displayMacroBlockSubmenu('p', "search window (4, 8, 12, or 16)");
 						while (true) {
 							try {
 								p = sc.nextInt();
@@ -151,7 +148,7 @@ public class CS4551_Quach {
 						
 						// Display and write residual image.
 						Image residualImage = ImageUtils.blocksToImage(residualBlocks.getBlocks(), targetImage.getW(), targetImage.getH());
-						residualImage.display();
+						residualImage.display("Residual Image");
 						residualImage.write2PPM(FileUtils.generateNewFilePath(targetImagePath, "error_", null, null));
 						
 						// Write motion vectors to file.
@@ -169,7 +166,7 @@ public class CS4551_Quach {
 							.append(motionVectors);
 						FileUtils.writeToFile(sb.toString(), basePath + "mv.txt");
 						
-						System.out.println("Residual image and motion vectors were written to " + basePath);
+						System.out.println("Residual image and motion vectors were written to directory " + basePath);
 						
 					}
 
@@ -177,25 +174,76 @@ public class CS4551_Quach {
 					else if (choice == 2) {
 
 						// Request the filename/path
-						menuDisplay.displayFilePathRequest();
+						menuDisplay.displayDirectoryPathRequest("IDB files");
 
-						String filePath = "";
+						String idbDirectory = "";
 						while (sc.hasNextLine()) {
-							filePath = sc.nextLine();
-							if (!filePath.isEmpty()) {
+							idbDirectory = sc.nextLine();
+							if (!idbDirectory.isEmpty()) {
 								break;
 							}
 						}
 						
-						Path path = Paths.get(filePath);
+						// Request sequence number
+						int sequence = 0;
+						menuDisplay.displayImageSequenceNumber(19, 179);
+						while (true) {
+							try {
+								sequence = sc.nextInt();
+								if (!ValidationUtils.frameIsValid(sequence)) {
+									menuDisplay.displayInvalidInput();
+								}
+								else {
+									break;
+								}
+							}
+							catch (InputMismatchException e) {
+								menuDisplay.displayInvalidInput();
+								sc.nextLine();
+							}
+						}
+						
+						String targetImagePath = FileUtils.join(idbDirectory, FileUtils.idbFilename(sequence));
+						String referenceImagePath = FileUtils.join(idbDirectory, FileUtils.idbFilename(sequence - 2));
+						Image targetImage = null, referenceImage = null;
+						
 						try {
+							targetImage = new ClonableImage(targetImagePath); 
+						}
+						catch (FileNotFoundException e) {
+							menuDisplay.displayFileNotFound(targetImagePath, "Exiting...");
+							System.exit(1);
+						}
+						catch (IOException e) {
+							menuDisplay.displayFileCannotBeRead(targetImagePath, "Exiting...");
+							System.exit(1);
+						}
 
-							//	DO SOMETHING
-							
+						try {
+							referenceImage = new ClonableImage(referenceImagePath);
 						}
-						catch (Exception e) {
-							e.printStackTrace();
+						catch (FileNotFoundException e) {
+							menuDisplay.displayFileNotFound(referenceImagePath, "Exiting...");
+							System.exit(1);
 						}
+						catch (IOException e) {
+							menuDisplay.displayFileCannotBeRead(targetImagePath, "Exiting...");
+							System.exit(1);
+						}
+						
+						// Divide the target image into a set of nxn macro blocks
+						Macroblocks macroblocks = Macroblocks.fromImage(targetImage, 8);
+						
+						// Calculate motion vectors and error blocks
+						ResidualBlocks residualBlocks = ResidualBlocks.fromComparison(macroblocks, referenceImage, 8, BlockSearch.LINEAR);
+						
+						// Display and write colorized residual image.
+						residualBlocks.normalize();
+						residualBlocks.colorizeDynamicBlocks();
+						Image residualImage = ImageUtils.blocksToImage(residualBlocks.getBlocks(), targetImage.getW(), targetImage.getH());
+						residualImage.display("Dynamic Blocks");
+						residualImage.write2PPM(FileUtils.generateNewFilePath(targetImagePath, null, "_dynamic_blocks", null));
+						
 					}
 
 					// Display main menu again.

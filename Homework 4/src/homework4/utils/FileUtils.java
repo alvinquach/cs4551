@@ -1,5 +1,6 @@
 package homework4.utils;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -63,6 +64,14 @@ public class FileUtils {
 			filename = filename.substring(0, extensionDelimiterIndex) + "." + extension;
 		}
 		return basePath + filename;
+	}
+	
+	public static String join(String directory, String filename) {
+		return Paths.get(directory).toAbsolutePath().toString() + File.separator + filename;
+	}
+	
+	public static String idbFilename(int sequence) {
+		return "Walk_" + (sequence < 100 ? sequence < 10 ? "00" : "0" : "") + sequence + ".ppm"; 
 	}
 
 }

@@ -47,12 +47,17 @@ public class MenuDisplay {
 
 	/** Prints request for n, p, etc. to the console. */
 	public void displayAliasingSubmenu(char varName) {
-		displayAliasingSubmenu(varName, null);
+		displayMacroBlockSubmenu(varName, null);
 	}
 	
 	/** Prints request for n, p, etc. to the console. */
-	public void displayAliasingSubmenu(char varName, String desc) {
+	public void displayMacroBlockSubmenu(char varName, String desc) {
 		System.out.println("Enter a value for " + varName + (desc == null ? "" : " (" + desc + ")") + ":");
+	}
+	
+	/** Prints request for image sequence number to the console. */
+	public void displayImageSequenceNumber(int min, int max) {
+		System.out.println("Enter the frame number (" + min + "-" + max +"): ");
 	}
 	
 	/** Prints the request for the filename/path. */
@@ -63,6 +68,11 @@ public class MenuDisplay {
 	/** Prints the request for the filename/path. */
 	public void displayFilePathRequest(String desc) {
 		System.out.println("Enter the path to the" + (desc == null ? "" : " " + desc) + " file: ");
+	}
+	
+	/** Prints the request for a directory. */
+	public void displayDirectoryPathRequest(String desc) {
+		System.out.println("Enter the path to the" + (desc == null ? "" : " " + desc) + " directory: ");
 	}
 
 	/** Prints the syntax for running the application to the console. */

@@ -3,6 +3,8 @@ package homework4.models.image.motion;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import com.sun.glass.ui.Pixels;
+
 import homework4.models.Coord;
 import homework4.models.image.Image;
 import homework4.models.image.Pixel;
@@ -68,6 +70,20 @@ public class ResidualBlocks {
 					}
 				});
 		}
+	}
+	
+	public void colorizeDynamicBlocks() {
+		Arrays.stream(blocks)
+			.flatMap(c -> Arrays.stream(c))
+			.forEach(block -> {
+				if (block.getMotionVector().x == 0 && block.getMotionVector().y == 0) {
+					return;
+				}
+				Arrays.stream(block.getPixels()).flatMap(p -> Arrays.stream(p))
+				.forEach(pixel -> {
+					pixel.setR((255 + pixel.getR()) / 2);
+				});
+			});
 	}
 	
 	@Override
