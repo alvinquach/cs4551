@@ -41,14 +41,14 @@ public class ResidualBlock extends Block {
 					int blockDiff = 0;
 					for (int x = 0; x < n; x++) {
 						for (int y = 0; y < n; y++) {
-							int pixelDiff = calculateAbsoluteDifference(block, reference, start, new Coord(x, y), new Coord(px, py));
+							int pixelDiff = calculateAbsoluteDifference(block, reference, start, new Coord(x, y), new Coord(-px, -py));
 							blockDiff += pixelDiff * pixelDiff; // MSD
 						}
 					}
 					if (blockDiff < minDiff) {
 						minDiff = blockDiff;
-						result.motionVector.x = px;
-						result.motionVector.y = py;
+						result.motionVector.x = -px;
+						result.motionVector.y = -py;
 					}
 				}
 			}
@@ -69,15 +69,15 @@ public class ResidualBlock extends Block {
 		return result;
 	}
 	
-	private static int calculateAbsoluteDifference(Block block, Image reference, Coord start, Coord currnent, Coord offset) {
+	private static int calculateAbsoluteDifference(Block block, Image reference, Coord start, Coord current, Coord offset) {
 		int[] rgb = new int[3];
 		try {
-			reference.getPixel(start.x + currnent.x + offset.x, start.y + currnent.y + offset.y, rgb);
+			reference.getPixel(start.x + current.x - offset.x, start.y + current.y - offset.y, rgb);
 		}
 		catch (ArrayIndexOutOfBoundsException e) {
 			rgb[0] = rgb[1] = rgb[2] = 0;
 		}
-		int blockPixelValue = ImageUtils.calculateGrayValue(block.pixels[currnent.x][currnent.y]);
+		int blockPixelValue = ImageUtils.calculateGrayValue(block.pixels[current.x][current.y]);
 		int referencePixelValue = ImageUtils.calculateGrayValue(rgb);
 		return Math.abs(blockPixelValue - referencePixelValue);
 	}
