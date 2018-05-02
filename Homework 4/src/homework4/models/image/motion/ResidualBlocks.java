@@ -24,6 +24,14 @@ public class ResidualBlocks {
 		return blocks[0][0].getBlockSize();
 	}
 	
+	public int getHCount() {
+		return blocks.length;
+	}
+	
+	public int getVCount() {
+		return blocks[0].length;
+	}
+	
 	public void normalize() {
 		int min = Integer.MAX_VALUE;
 		int max = Integer.MIN_VALUE;

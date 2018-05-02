@@ -20,6 +20,14 @@ public class Macroblocks {
 		return blocks[0][0].getBlockSize();
 	}
 	
+	public int getHCount() {
+		return blocks.length;
+	}
+	
+	public int getVCount() {
+		return blocks[0].length;
+	}
+	
 	public static Macroblocks fromImage(Image image, int n) throws Exception {
 		if (!ValidationUtils.nIsValid(n)) {
 			throw new Exception("Invalid n value of " + n);

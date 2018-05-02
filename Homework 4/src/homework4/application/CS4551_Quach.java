@@ -16,6 +16,7 @@ import homework4.models.image.motion.BlockSearch;
 import homework4.models.image.motion.Macroblocks;
 import homework4.models.image.motion.ResidualBlock;
 import homework4.models.image.motion.ResidualBlocks;
+import homework4.utils.FileUtils;
 import homework4.utils.ImageUtils;
 import homework4.utils.ValidationUtils;
 
@@ -148,8 +149,28 @@ public class CS4551_Quach {
 						// Scale error values to range [0, 255]
 						residualBlocks.normalize();
 						
-						ImageUtils.blocksToImage(residualBlocks.getBlocks(), targetImage.getW(), targetImage.getH()).display();
-						System.out.println(residualBlocks);
+						// Display and write residual image.
+						Image residualImage = ImageUtils.blocksToImage(residualBlocks.getBlocks(), targetImage.getW(), targetImage.getH());
+						residualImage.display();
+						residualImage.write2PPM(FileUtils.generateNewFilePath(targetImagePath, "error_", null, null));
+						
+						// Write motion vectors to file.
+						String basePath = FileUtils.extractPath(targetImagePath);
+						String motionVectors = residualBlocks.toString();
+						System.out.println(motionVectors);
+						StringBuilder sb = new StringBuilder()
+							.append("# Name: Alvin Quach").append("\n")
+							.append("# Target image name: ").append(FileUtils.extractFilename(targetImagePath)).append("\n")
+							.append("# Reference  image name: ").append(FileUtils.extractFilename(referenceImagePath)).append("\n")
+							.append("# Number of target macro blocks: ")
+							.append(residualBlocks.getHCount() + " x " + residualBlocks.getVCount())
+							.append(" (image size is " + targetImage.getW() + " x " + targetImage.getH() + ")").append("\n")
+							.append("\n")
+							.append(motionVectors);
+						FileUtils.writeToFile(sb.toString(), basePath + "mv.txt");
+						
+						System.out.println("Residual image and motion vectors were written to " + basePath);
+						
 					}
 
 					// Removing Moving Objects
@@ -192,5 +213,5 @@ public class CS4551_Quach {
 		}
 		sc.close();
 	}
-
+	
 }
