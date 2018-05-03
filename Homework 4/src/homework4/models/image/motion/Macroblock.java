@@ -5,11 +5,11 @@ import homework4.models.image.Image;
 import homework4.models.image.Pixel;
 
 public class Macroblock extends Block {
-	
+
 	public Macroblock(int n) throws Exception {
 		super(n);
 	}
-	
+
 	public Macroblock(int n, Coord start, Image image) throws Exception {
 		this(n);
 		int[] rgb = new int[3];
@@ -28,4 +28,21 @@ public class Macroblock extends Block {
 		}
 	}
 
+	@Override
+	public Macroblock clone() {
+		Macroblock result = null;
+		try {
+			result = new Macroblock(n);
+		}
+		catch (Exception e) {
+			// Not possible to occur.
+		}
+		for (int x = 0; x < n; x++) {
+			for (int y = 0; y < n; y++) {
+				result.pixels[x][y] = pixels[x][y].clone();
+			}
+		}
+		return result;
+	}
+	
 }

@@ -28,6 +28,18 @@ public class Macroblocks {
 		return blocks[0].length;
 	}
 	
+	public Macroblocks clone() {
+		int hCount = blocks.length;
+		int vCount = blocks[0].length;
+		Macroblocks result = new Macroblocks(hCount, vCount);
+		for (int i = 0; i < hCount; i++) {
+			for (int j = 0; j < vCount; j++) {
+				result.blocks[i][j] = blocks[i][j].clone();
+			}
+		}
+		return result;
+	}
+	
 	public static Macroblocks fromImage(Image image, int n) throws Exception {
 		if (!ValidationUtils.nIsValid(n)) {
 			throw new Exception("Invalid n value of " + n);

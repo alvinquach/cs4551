@@ -2,8 +2,6 @@ package homework4.application;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -242,7 +240,37 @@ public class CS4551_Quach {
 						residualBlocks.colorizeDynamicBlocks();
 						Image residualImage = ImageUtils.blocksToImage(residualBlocks.getBlocks(), targetImage.getW(), targetImage.getH());
 						residualImage.display("Dynamic Blocks");
-						residualImage.write2PPM(FileUtils.generateNewFilePath(targetImagePath, null, "_dynamic_blocks", null));
+						residualImage.write2PPM(FileUtils.join(FileUtils.extractPath(targetImagePath), "obj_dynamic_blocks.ppm"));
+						
+						// Remove moving object from target image.
+						
+						// 1. Replace dynamic blocks with closest static block.
+						Macroblocks macroblocks1 = macroblocks.clone();
+						ImageUtils.replaceDynamicWithClosestStatic(macroblocks1, residualBlocks);
+						Image replaced1 = ImageUtils.blocksToImage(macroblocks1.getBlocks(), targetImage.getW(), targetImage.getH());
+						replaced1.display("Replaced 1");
+						replaced1.write2PPM(FileUtils.join(FileUtils.extractPath(targetImagePath), "obj_remove1.ppm"));
+						
+						// 2. Replace dynamic blocks with blocks from 5th frame.
+						try {
+							Image staticImage = new ClonableImage(FileUtils.join(idbDirectory, FileUtils.idbFilename(5)));
+							Macroblocks staticMacroblocks = Macroblocks.fromImage(staticImage, 8);
+							Macroblocks macroblocks2 = macroblocks.clone();
+							ImageUtils.replaceDynamicWithReference(staticMacroblocks, macroblocks2, residualBlocks);
+							Image replaced2 = ImageUtils.blocksToImage(macroblocks2.getBlocks(), targetImage.getW(), targetImage.getH());
+							replaced2.display("Replaced 2");
+							replaced2.write2PPM(FileUtils.join(FileUtils.extractPath(targetImagePath), "obj_remove2.ppm"));
+						}
+						catch (FileNotFoundException e) {
+							menuDisplay.displayFileNotFound(targetImagePath, "This image is needed as a source for static blocks. Exiting...");
+							System.exit(1);
+						}
+						catch (IOException e) {
+							menuDisplay.displayFileCannotBeRead(targetImagePath, "This image is needed as a source for static blocks. Exiting...");
+							System.exit(1);
+						}
+						
+						System.out.println("Images were written to directory " + idbDirectory);
 						
 					}
 

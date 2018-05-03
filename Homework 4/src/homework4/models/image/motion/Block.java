@@ -7,7 +7,7 @@ public abstract class Block {
 
 	protected Pixel[][] pixels;
 	
-	private int n;
+	protected final int n;
 	
 	public Block(int n) throws Exception {
 		if (!ValidationUtils.nIsValid(n)) {
@@ -24,5 +24,7 @@ public abstract class Block {
 	public final int getBlockSize() {
 		return n;
 	}
+	
+	public abstract Block clone();
 	
 }

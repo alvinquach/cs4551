@@ -60,6 +60,10 @@ public class Pixel {
 		return rgb;
 	}
 	
+	public Pixel clone() {
+		return new Pixel(r, g, b);
+	}
+	
 	public static Pixel fromArray(int[] rgb) {
 		return new Pixel(rgb[0], rgb[1], rgb[2]);
 	}

@@ -25,6 +25,24 @@ public class ResidualBlock extends Block {
 	public int getMatchCount() {
 		return matchCount;
 	}
+	
+	public ResidualBlock clone() {
+		ResidualBlock result = null;
+		try {
+			result = new ResidualBlock(n);
+		}
+		catch (Exception e) {
+			// Not possible to occur.
+		}
+		for (int x = 0; x < n; x++) {
+			for (int y = 0; y < n; y++) {
+				result.pixels[x][y] = pixels[x][y].clone();
+			}
+		}
+		result.motionVector = new Coord(motionVector.x, motionVector.y);
+		result.matchCount = matchCount;
+		return result;
+	}
 
 	public static ResidualBlock fromComparison(Block block, Image reference, Coord start, int p, BlockSearch searchType) throws Exception {
 		if (!ValidationUtils.pIsValid(p)) {

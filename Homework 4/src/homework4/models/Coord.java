@@ -15,6 +15,10 @@ public class Coord {
 		this.y = y;
 	}
 	
+	public boolean isZero() {
+		return x == 0 && y == 0;
+	}
+	
 	@Override
 	public String toString() {
 		String x = String.valueOf(this.x);
