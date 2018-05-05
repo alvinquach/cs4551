@@ -69,21 +69,7 @@ public class ResidualBlocks {
 				});
 		}
 	}
-	
-	public void colorizeDynamicBlocks() {
-		Arrays.stream(blocks)
-			.flatMap(c -> Arrays.stream(c))
-			.forEach(block -> {
-				if (block.getMotionVector().isZero()) {
-					return;
-				}
-				Arrays.stream(block.getPixels()).flatMap(p -> Arrays.stream(p))
-				.forEach(pixel -> {
-					pixel.setR((255 + pixel.getR()) / 2);
-				});
-			});
-	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();

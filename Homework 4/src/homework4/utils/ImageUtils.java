@@ -1,10 +1,13 @@
 package homework4.utils;
 
+import java.util.Arrays;
+
 import homework4.models.Coord;
 import homework4.models.image.ClonableImage;
 import homework4.models.image.Image;
 import homework4.models.image.Pixel;
 import homework4.models.image.motion.Block;
+import homework4.models.image.motion.Macroblock;
 import homework4.models.image.motion.Macroblocks;
 import homework4.models.image.motion.ResidualBlock;
 import homework4.models.image.motion.ResidualBlocks;
@@ -46,6 +49,27 @@ public class ImageUtils {
 		return image;
 	}
 	
+	public static void colorizeDynamicBlocks(Macroblocks image, ResidualBlocks residual) {
+		for (int i = 0; i < residual.getHCount(); i++) {
+			for (int j = 0; j < residual.getVCount(); j++) {
+				ResidualBlock residualBlock = residual.getBlocks()[i][j];
+				if (residualBlock.getMotionVector().isZero()) {
+					continue;
+				}
+				try {
+					Macroblock block = image.getBlocks()[i][j];
+					Arrays.stream(block.getPixels()).flatMap(p -> Arrays.stream(p))
+					.forEach(pixel -> {
+						pixel.setR((255 + pixel.getR()) / 2);
+					});
+				}
+				catch (ArrayIndexOutOfBoundsException e) {
+					continue;
+				}
+			}
+		}
+	}
+	
 	public static void replaceDynamicWithClosestStatic(Macroblocks image, ResidualBlocks residual) {
 		// TODO Check if image and residual have the same number of blocks.
 		for (int i = 0; i < residual.getHCount(); i++) {
@@ -61,7 +85,7 @@ public class ImageUtils {
 			}
 		}
 	}
-	
+
 	public static void replaceDynamicWithReference(Macroblocks source, Macroblocks destination, ResidualBlocks residual) {
 		// TODO Check if images have same number of blocks.
 		for (int i = 0; i < residual.getHCount(); i++) {

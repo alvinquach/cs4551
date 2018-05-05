@@ -134,6 +134,9 @@ public class CS4551_Quach {
 								sc.nextLine();
 							}
 						}
+						
+						// Tell the user to wait, as the following process may take some time.
+						System.out.println("Please wait...");
 
 						// Divide the target image into a set of nxn macro blocks
 						Macroblocks macroblocks = Macroblocks.fromImage(targetImage, n);
@@ -201,6 +204,7 @@ public class CS4551_Quach {
 							}
 						}
 						
+						// Attempt to load the images...
 						String targetImagePath = FileUtils.join(idbDirectory, FileUtils.idbFilename(sequence));
 						String referenceImagePath = FileUtils.join(idbDirectory, FileUtils.idbFilename(sequence - 2));
 						Image targetImage = null, referenceImage = null;
@@ -229,35 +233,76 @@ public class CS4551_Quach {
 							System.exit(1);
 						}
 						
+						int n = 0, p = 0;
+						
+						// Request n
+						menuDisplay.displayMacroBlockSubmenu('n', "macro block size (8, 16, or 24)");
+						while (true) {
+							try {
+								n = sc.nextInt();
+								if (!ValidationUtils.nIsValid(n)) {
+									menuDisplay.displayInvalidInput();
+								}
+								else {
+									break;
+								}
+							}
+							catch (InputMismatchException e) {
+								menuDisplay.displayInvalidInput();
+								sc.nextLine();
+							}
+						}
+						
+						// Request p
+						menuDisplay.displayMacroBlockSubmenu('p', "search window (4, 8, 12, or 16)");
+						while (true) {
+							try {
+								p = sc.nextInt();
+								if (!ValidationUtils.pIsValid(p)) {
+									menuDisplay.displayInvalidInput();
+								}
+								else {
+									break;
+								}
+							}
+							catch (InputMismatchException e) {
+								menuDisplay.displayInvalidInput();
+								sc.nextLine();
+							}
+						}
+						
+						// Tell the user to wait, as the following process may take some time.
+						System.out.println("Please wait...");
+						
 						// Divide the target image into a set of nxn macro blocks
-						Macroblocks macroblocks = Macroblocks.fromImage(targetImage, 8);
+						Macroblocks macroblocks = Macroblocks.fromImage(targetImage, n);
 						
 						// Calculate motion vectors and error blocks
-						ResidualBlocks residualBlocks = ResidualBlocks.fromComparison(macroblocks, referenceImage, 8, BlockSearch.LINEAR);
+						ResidualBlocks residualBlocks = ResidualBlocks.fromComparison(macroblocks, referenceImage, p, BlockSearch.LINEAR);
 						
-						// Display and write colorized residual image.
-						residualBlocks.normalize();
-						residualBlocks.colorizeDynamicBlocks();
-						Image residualImage = ImageUtils.blocksToImage(residualBlocks.getBlocks(), targetImage.getW(), targetImage.getH());
-						residualImage.display("Dynamic Blocks");
-						residualImage.write2PPM(FileUtils.join(FileUtils.extractPath(targetImagePath), "obj_dynamic_blocks.ppm"));
+						// Display and write colorized target image.
+						Macroblocks macroblocks1 = macroblocks.clone();
+						ImageUtils.colorizeDynamicBlocks(macroblocks1, residualBlocks);
+						ImageUtils.blocksToImage(macroblocks1.getBlocks(), targetImage);
+						targetImage.display("Dynamic Blocks");
+						targetImage.write2PPM(FileUtils.join(FileUtils.extractPath(targetImagePath), "obj_dynamic_blocks.ppm"));
 						
 						// Remove moving object from target image.
 						
 						// 1. Replace dynamic blocks with closest static block.
-						Macroblocks macroblocks1 = macroblocks.clone();
-						ImageUtils.replaceDynamicWithClosestStatic(macroblocks1, residualBlocks);
-						Image replaced1 = ImageUtils.blocksToImage(macroblocks1.getBlocks(), targetImage.getW(), targetImage.getH());
+						Macroblocks macroblocks2 = macroblocks.clone();
+						ImageUtils.replaceDynamicWithClosestStatic(macroblocks2, residualBlocks);
+						Image replaced1 = ImageUtils.blocksToImage(macroblocks2.getBlocks(), targetImage.getW(), targetImage.getH());
 						replaced1.display("Replaced 1");
 						replaced1.write2PPM(FileUtils.join(FileUtils.extractPath(targetImagePath), "obj_remove1.ppm"));
 						
 						// 2. Replace dynamic blocks with blocks from 5th frame.
 						try {
 							Image staticImage = new ClonableImage(FileUtils.join(idbDirectory, FileUtils.idbFilename(5)));
-							Macroblocks staticMacroblocks = Macroblocks.fromImage(staticImage, 8);
-							Macroblocks macroblocks2 = macroblocks.clone();
-							ImageUtils.replaceDynamicWithReference(staticMacroblocks, macroblocks2, residualBlocks);
-							Image replaced2 = ImageUtils.blocksToImage(macroblocks2.getBlocks(), targetImage.getW(), targetImage.getH());
+							Macroblocks staticMacroblocks = Macroblocks.fromImage(staticImage, n);
+							Macroblocks macroblocks3 = macroblocks.clone();
+							ImageUtils.replaceDynamicWithReference(staticMacroblocks, macroblocks3, residualBlocks);
+							Image replaced2 = ImageUtils.blocksToImage(macroblocks3.getBlocks(), targetImage.getW(), targetImage.getH());
 							replaced2.display("Replaced 2");
 							replaced2.write2PPM(FileUtils.join(FileUtils.extractPath(targetImagePath), "obj_remove2.ppm"));
 						}
